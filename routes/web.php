@@ -21,4 +21,10 @@ Route::get('/example', function () {
     return view('example');
 })->name('example');
 
+// Character Compendium routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/characters', [\App\Http\Controllers\CharacterCompendiumController::class, 'index'])
+        ->name('characters.index');
+});
+
 require __DIR__.'/auth.php';
