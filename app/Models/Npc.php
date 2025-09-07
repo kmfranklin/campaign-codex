@@ -9,6 +9,28 @@ class Npc extends Model
 {
     use HasFactory;
 
+    public const ALIGNMENTS = [
+        'Lawful Good', 'Neutral Good', 'Chaotic Good',
+        'Lawful Neutral', 'True Neutral', 'Chaotic Neutral',
+        'Lawful Evil', 'Neutral Evil', 'Chaotic Evil',
+    ];
+
+    public const CLASSES = [
+        'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard',
+    ];
+
+    public const SOCIAL_ROLES = [
+        'Ally', 'Enemy', 'Neutral',
+    ];
+
+    public const NARRATIVE_ROLES = [
+        'Quest Giver', 'Merchant', 'Trainer/Mentor', 'Informant', 'Guide',
+    ];
+
+    public const ARCHETYPE_ROLES = [
+        'Faction Leader', 'Civilian', 'Villain', 'Patron', 'Companion', 'Rival',
+    ];
+
     /**
      * The attributes that are mass assignable.
      */
