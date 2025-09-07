@@ -73,9 +73,6 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('example')" :active="request()->routeIs('example')">
-                {{ __('Example') }}
-            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('characters.index')" :active="request()->routeIs('characters.index')">
                 {{ __('Character Compendium') }}
             </x-responsive-nav-link>
