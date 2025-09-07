@@ -25,8 +25,4 @@ Route::middleware('auth')->group(function () {
     Route::resource('npcs', NpcController::class);
 });
 
-Route::get('/example', function () {
-    return view('example');
-})->name('example');
-
 require __DIR__.'/auth.php';
