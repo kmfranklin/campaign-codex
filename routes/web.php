@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NpcController;
-use App\Http\Controllers\CharacterCompendiumController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,11 +17,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Character Compendium
-    Route::get('/characters', [CharacterCompendiumController::class, 'index'])->name('characters.index');
+    Route::redirect('/characters', '/compendium/npcs');
 
-    // NPC CRUD
-    Route::resource('npcs', NpcController::class);
+    Route::resource('compendium/npcs', NpcController::class)->names('compendium.npcs');
 });
 
 require __DIR__.'/auth.php';

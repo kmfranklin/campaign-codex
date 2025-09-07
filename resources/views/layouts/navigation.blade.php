@@ -15,7 +15,8 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('characters.index')"       :active="request()->routeIs('characters.index')">
+                    <x-nav-link href="{{ route('compendium.npcs.index') }}"
+                                :active="request()->routeIs('compendium.npcs.*')">
                         {{ __('Character Compendium') }}
                     </x-nav-link>
                 </div>
@@ -73,8 +74,9 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('characters.index')" :active="request()->routeIs('characters.index')">
-                {{ __('Character Compendium') }}
+                <x-responsive-nav-link href="{{ route('compendium.npcs.index') }}"
+                    :active="request()->routeIs('compendium.npcs.*')">
+                    {{ __('Character Compendium') }}
             </x-responsive-nav-link>
         </div>
 

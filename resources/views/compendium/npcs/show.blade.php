@@ -4,7 +4,7 @@
 @section('content')
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
     {{-- Back link --}}
-    <a href="{{ route('characters.index') }}"
+    <a href="{{ route('compendium.npcs.index') }}"
        class="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-900 mb-4">
       <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
            viewBox="0 0 24 24" stroke="currentColor">
@@ -65,13 +65,13 @@
                 {{-- Top-right actions --}}
                 <div class="ml-auto flex gap-2">
                     <a
-                        href="{{ route('npcs.edit', $npc) }}"
+                        href="{{ route('compendium.npcs.edit', $npc) }}"
                         class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded"
                     >
                         Edit
                     </a>
                     <form
-                        action="{{ route('npcs.destroy', $npc) }}"
+                        action="{{ route('compendium.npcs.destroy', $npc) }}"
                         method="POST"
                         onsubmit="return confirm('Delete this NPC?')"
                     >

@@ -4,7 +4,7 @@
   <div class="px-4 sm:px-6 lg:px-8">
     <div class="sm:flex sm:items-center sm:justify-between py-6">
       <h1 class="text-2xl font-semibold text-gray-900">Character Compendium</h1>
-      <a href="{{ route('npcs.create') }}"
+      <a href="{{ route('compendium.npcs.create') }}"
          class="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-300">
         + New NPC
       </a>
@@ -31,15 +31,15 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $npc['class'] ?? '—' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $npc->race ?? '—' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <a href="{{ route('npcs.show', $npc) }}"
+                  <a href="{{ route('compendium.npcs.show', $npc) }}"
                      class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-300">
                     View
                   </a>
-                  <a href="{{ route('npcs.edit', $npc) }}"
+                  <a href="{{ route('compendium.npcs.edit', $npc) }}"
                      class="ml-4 text-yellow-600 hover:text-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-300">
                     Edit
                   </a>
-                  <form action="{{ route('npcs.destroy', $npc) }}" method="POST" class="inline ml-4"
+                  <form action="{{ route('compendium.npcs.destroy', $npc) }}" method="POST" class="inline ml-4"
                         onsubmit="return confirm('Delete this NPC?');">
                     @csrf
                     @method('DELETE')
@@ -74,7 +74,7 @@
                 {{ $npc['class'] ?? '—' }} &middot; {{ $npc->race ?? '—' }}
               </p>
             </div>
-            <a href="{{ route('npcs.show', $npc) }}"
+            <a href="{{ route('compendium.npcs.show', $npc) }}"
                class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-300">
               View
             </a>

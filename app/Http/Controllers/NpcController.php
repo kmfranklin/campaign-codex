@@ -15,7 +15,7 @@ class NpcController extends Controller
     {
         $npcs = Npc::orderBy('name')->get();
 
-        return view('npcs.index', compact('npcs'));
+        return view('compendium.npcs.index', compact('npcs'));
     }
 
     /**
@@ -23,7 +23,7 @@ class NpcController extends Controller
      */
     public function create()
     {
-        return view('npcs.create');
+        return view('compendium.npcs.create');
     }
 
     /**
@@ -73,7 +73,7 @@ class NpcController extends Controller
         $npc = Npc::create($data);
 
         return redirect()
-            ->route('npcs.show', $npc)
+            ->route('compendium.npcs.show', $npc)
             ->with('success', 'NPC created successfully.');
     }
 
@@ -82,7 +82,7 @@ class NpcController extends Controller
      */
     public function show(Npc $npc)
     {
-        return view('npcs.show', compact('npc'));
+        return view('compendium.npcs.show', compact('npc'));
     }
 
     /**
@@ -90,7 +90,7 @@ class NpcController extends Controller
      */
     public function edit(Npc $npc)
     {
-        return view('npcs.edit', compact('npc'));
+        return view('compendium.npcs.edit', compact('npc'));
     }
 
     /**
@@ -152,7 +152,7 @@ class NpcController extends Controller
         $npc->update($data);
 
         return redirect()
-            ->route('npcs.show', $npc)
+            ->route('compendium.npcs.show', $npc)
             ->with('success', 'NPC updated successfully.');
     }
 
@@ -170,7 +170,7 @@ class NpcController extends Controller
         $npc->delete();
 
         return redirect()
-            ->route('characters.index')
+            ->route('compendium.npcs.index')
             ->with('success', 'NPC deleted successfully.');
     }
 }
