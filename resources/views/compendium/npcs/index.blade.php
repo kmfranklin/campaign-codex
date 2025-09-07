@@ -10,6 +10,21 @@
       </a>
     </div>
 
+    <form x-data="{ q: '{{ request('q') }}' }" method="GET" class="mb-4 flex gap-4">
+        <input
+            name="q"
+            x-model="q"
+            type="text"
+            placeholder="Search by name…"
+            value="{{ request('q') }}"
+            class="border rounded px-3 py-2 flex-1"
+        />
+        <button type="submit"
+                class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+            Search
+        </button>
+    </form>
+
     {{-- Desktop Table --}}
     <div class="hidden sm:block overflow-x-auto">
       <div class="min-w-full bg-white border border-gray-200 shadow-sm sm:rounded-lg">
