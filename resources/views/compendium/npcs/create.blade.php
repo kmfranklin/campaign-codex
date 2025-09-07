@@ -15,7 +15,7 @@
         </div>
     @endif
 
-    <form action="{{ route('npcs.store') }}"
+    <form action="{{ route('compendium.npcs.store') }}"
           method="POST"
           enctype="multipart/form-data"
           class="space-y-10">

@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('npcs.update', $npc) }}" method="POST" class="space-y-10">
+    <form action="{{ route('compendium.npcs.update', $npc) }}" method="POST" class="space-y-10">
         @csrf
         @method('PUT')
 
@@ -61,7 +61,7 @@
 
         {{-- Submit --}}
         <div class="pt-4 border-t flex justify-between">
-            <a href="{{ route('npcs.show', $npc) }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</a>
+            <a href="{{ route('compendium.npcs.show', $npc) }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</a>
             <button type="submit" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 Update NPC
             </button>
