@@ -20,7 +20,7 @@
                 <!-- Desktop Nav -->
                 <nav class="hidden md:flex space-x-8 items-center">
                     <a href="#" class="hover:text-indigo-600">Dashboard</a>
-                    <a href="#" class="hover:text-indigo-600">Compendium</a>
+                    <a href="#" class="hover:text-indigo-600">Character Compendium</a>
                     <a href="#" class="hover:text-indigo-600">Settings</a>
                     @auth
                         <form method="POST" action="{{ route('logout') }}">
@@ -42,7 +42,7 @@
                     <!-- Mobile Nav -->
                     <div x-show="open" class="absolute top-16 left-0 w-full bg-white border-t md:hidden">
                         <a href="#" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Compendium</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Character Compendium</a>
                         <a href="#" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
                         @auth
                             <form method="POST" action="{{ route('logout') }}" class="px-4 py-2">
@@ -57,7 +57,15 @@
     </header>
 
     <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
-        {{ $slot ?? '' }}
+        @if (session('success'))
+            <div x-data="{ show: true }" x-show="show"
+                x-transition
+                class="mb-6 p-4 bg-green-100 border border-green-300 text-green-800 rounded flex justify-between items-center">
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @yield('content')
     </main>
 
     <footer class="bg-white border-t py-4 text-center text-sm text-gray-500">
