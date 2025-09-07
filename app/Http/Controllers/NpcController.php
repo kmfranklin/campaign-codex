@@ -4,17 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Npc;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class NpcController extends Controller
 {
     /**
      * Display a listing of the NPCs.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $npcs = Npc::orderBy('name')->get();
+        // 1. Start a query builder
+        $query = Npc::query();
 
+        // 2. Apply the search filter if present
+        if ($request->filled('q')) {
+            $query->where('name', 'like', '%'.$request->q.'%');
+        }
+
+        // 3. Order, paginate, and preserve the 'q' parameter
+        $npcs = $query
+            ->orderBy('name')
+            ->paginate(15)
+            ->appends($request->only('q'));
+
+        // 4. Render the view
         return view('compendium.npcs.index', compact('npcs'));
     }
 
