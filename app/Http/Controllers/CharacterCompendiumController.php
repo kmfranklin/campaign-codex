@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Npc;
 
 class CharacterCompendiumController extends Controller
 {
@@ -11,6 +12,8 @@ class CharacterCompendiumController extends Controller
      */
     public function index()
     {
-        return view('characters.index');
+        $npcs = Npc::orderBy('name')->get();
+
+        return view('characters.index', compact('npcs'));
     }
 }

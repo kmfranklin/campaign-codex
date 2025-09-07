@@ -8,4 +8,12 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: 'campaign-codex.local',
+        port: 5173,
+        cors: true,
+        hmr: {
+            host: 'campaign-codex.local',
+        },
+    },
 });
