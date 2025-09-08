@@ -12,21 +12,35 @@ class NpcController extends Controller
      */
     public function index(Request $request)
     {
-        // 1. Start a query builder
+        // start a query builder instead of fetching all
         $query = Npc::query();
 
-        // 2. Apply the search filter if present
+        // name search
         if ($request->filled('q')) {
             $query->where('name', 'like', '%'.$request->q.'%');
         }
 
-        // 3. Order, paginate, and preserve the 'q' parameter
+        // class filter
+        if ($request->filled('class')) {
+            $query->where('class', $request->class);
+        }
+
+        // alignment filter
+        if ($request->filled('alignment')) {
+            $query->where('alignment', $request->alignment);
+        }
+
+        // role filter (request param should be name="role")
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+
+        // paginate and preserve all filter params
         $npcs = $query
             ->orderBy('name')
             ->paginate(15)
-            ->appends($request->only('q'));
+            ->appends($request->only(['q','class','alignment','role']));
 
-        // 4. Render the view
         return view('compendium.npcs.index', compact('npcs'));
     }
 

@@ -16,7 +16,7 @@ class Npc extends Model
     ];
 
     public const CLASSES = [
-        'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard',
+        'Artificer', 'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard',
     ];
 
     public const SOCIAL_ROLES = [
