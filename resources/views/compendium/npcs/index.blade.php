@@ -48,13 +48,13 @@
         </select>
 
         <!-- Roles filter -->
-        <select name="roles"
-                id="roles"
+        <select name="role"
+                id="role"
                 x-model="cls"
                 class="border rounded px-3 py-2">
             <option value="">All Roles</option>
             @foreach(\App\Models\Npc::SOCIAL_ROLES as $r)
-                <option value="{{ $r }}" {{ request('social_role')== $r ? 'selected' : '' }}>
+                <option value="{{ $r }}" {{ request('role')== $r ? 'selected' : '' }}>
                     {{ $r }}
                 </option>
             @endforeach
