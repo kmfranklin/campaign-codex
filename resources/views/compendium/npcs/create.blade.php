@@ -27,12 +27,32 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <x-form.field label="Name" name="name" required />
                 <x-form.field label="Alias" name="alias" />
-                <x-form.field label="Race" name="race" />
-                <x-form.field label="Class" name="class" />
-                <x-form.field label="Role" name="role" />
-                <x-form.field label="Alignment" name="alignment" />
+                <x-form.select
+                    name="race"
+                    label="Race/Species"
+                    :options="\App\Models\Npc::raceOptions()"
+                    placeholder="Choose Race/Species" />
+                <x-form.select
+                    name="class"
+                    label="Class"
+                    :options="\App\Models\Npc::classOptions()"
+                    placeholder="Choose Class" />
+                <x-form.select
+                    name="role"
+                    label="Role"
+                    :options="\App\Models\Npc::socialRoleOptions()"
+                    placeholder="Choose Role" />
+                <x-form.select
+                    name="alignment"
+                    label="Alignment"
+                    :options="\App\Models\Npc::alignmentOptions()"
+                    placeholder="Choose Alignment" />
                 <x-form.field label="Location" name="location" />
-                <x-form.field label="Status" name="status" value="Alive" />
+                <x-form.select
+                    label="Status"
+                    name="status"
+                    :options="\App\Models\Npc::statusOptions()"
+                    placeholder="Choose Status" />
 
                 {{-- Portrait upload --}}
                 <div>

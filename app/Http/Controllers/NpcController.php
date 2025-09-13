@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Npc;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class NpcController extends Controller
 {
@@ -62,12 +64,12 @@ class NpcController extends Controller
             'campaign_id'       => 'nullable|integer',
             'name'              => 'required|string|max:255',
             'alias'             => 'nullable|string|max:255',
-            'race'              => 'nullable|string|max:255',
-            'class'             => 'nullable|string|max:255',
-            'role'              => 'nullable|string|max:255',
-            'alignment'         => 'nullable|string|max:255',
+            'race' => ['nullable', Rule::in(Npc::raceOptions())],
+            'class' => ['nullable', Rule::in(Npc::classOptions())],
+            'role' => ['nullable', Rule::in(Npc::socialRoleOptions())],
+            'alignment' => ['nullable', Rule::in(Npc::alignmentOptions())],
+            'status' => ['nullable', Rule::in(Npc::statusOptions())],
             'location'          => 'nullable|string|max:255',
-            'status'            => 'nullable|string|max:50',
 
             'portrait'          => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
 

@@ -9,14 +9,19 @@ class Npc extends Model
 {
     use HasFactory;
 
+    // --- SRD Defaults ---
     public const ALIGNMENTS = [
         'Lawful Good', 'Neutral Good', 'Chaotic Good',
         'Lawful Neutral', 'True Neutral', 'Chaotic Neutral',
         'Lawful Evil', 'Neutral Evil', 'Chaotic Evil',
     ];
 
+    public const RACES = [
+        'Dragonborn', 'Dwarf', 'Elf', 'Gnome', 'Goliath', 'Halfling', 'Human', 'Orc', 'Tiefling',
+    ];
+
     public const CLASSES = [
-        'Artificer', 'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard',
+        'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard',
     ];
 
     public const SOCIAL_ROLES = [
@@ -31,46 +36,44 @@ class Npc extends Model
         'Faction Leader', 'Civilian', 'Villain', 'Patron', 'Companion', 'Rival',
     ];
 
-    /**
-     * The attributes that are mass assignable.
-     */
-    protected $fillable = [
-        // Core identity
-        'campaign_id',
-        'name',
-        'alias',
-        'race',
-        'class',
-        'role',
-        'alignment',
-        'location',
-        'status',
-        'portrait_path',
-
-        // Descriptive
-        'description',
-        'personality',
-        'quirks',
-
-        // Abilities + stats
-        'strength',
-        'dexterity',
-        'constitution',
-        'intelligence',
-        'wisdom',
-        'charisma',
-        'armor_class',
-        'hit_points',
-        'speed',
-        'challenge_rating',
-        'proficiency_bonus',
+    public const STATUSES = [
+        'Alive', 'Deceased', 'Unknown',
     ];
 
-    /**
-     * Relationships
-     */
-    // public function campaign()
-    // {
-    //     return $this->belongsTo(Campaign::class);
-    // }
+    protected $fillable = [
+        'campaign_id', 'name', 'alias', 'race', 'class', 'role', 'alignment', 'location', 'status', 'portrait_path',
+        'description', 'personality', 'quirks',
+        'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma',
+        'armor_class', 'hit_points', 'speed', 'challenge_rating', 'proficiency_bonus',
+    ];
+
+    // --- Option Accessors ---
+    public static function raceOptions(): array
+    {
+        return self::RACES;
+        // Later: return Race::pluck('name')->all();
+    }
+
+    public static function classOptions(): array
+    {
+        return self::CLASSES;
+        // Later: return CharacterClass::pluck('name')->all();
+    }
+
+    public static function alignmentOptions(): array
+    {
+        return self::ALIGNMENTS;
+        // Later: return Alignment::pluck('name')->all();
+    }
+
+    public static function socialRoleOptions(): array
+    {
+        return self::SOCIAL_ROLES;
+        // Later: return SocialRole::pluck('name')->all();
+    }
+
+    public static function statusOptions(): array
+    {
+        return self::STATUSES;
+    }
 }
