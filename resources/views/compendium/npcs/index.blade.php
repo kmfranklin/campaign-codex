@@ -64,6 +64,10 @@
                 class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
             Search
         </button>
+        <a href="{{ route('compendium.npcs.index') }}"
+            class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+            Reset
+        </a>
     </form>
 
     {{-- Desktop Table --}}
