@@ -5,12 +5,12 @@
     <div class="sm:flex sm:items-center sm:justify-between py-6">
       <h1 class="text-2xl font-semibold text-gray-900">Character Compendium</h1>
       <a href="{{ route('compendium.npcs.create') }}"
-         class="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-300">
+         class="inline-flex items-center px-4 py-2 bg-purple-800 hover:bg-purple-900 text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-300">
         + New NPC
       </a>
     </div>
 
-    <form x-data="{ q: '{{ request('q') }}' }" method="GET" class="mb-4 flex gap-4">
+    <form x-data="{ q: '{{ request('q') }}' }" method="GET" class="mb-4 flex gap-4 flex-wrap flex-col sm:flex-row items-stretch sm:items-center">
         <!-- Name search -->
         <input
             name="q"
@@ -25,7 +25,7 @@
         <select name="class"
                 id="class"
                 x-model="cls"
-                class="border rounded px-3 py-2">
+                class="custom-select">
             <option value="">All Classes</option>
             @foreach(\App\Models\Npc::CLASSES as $c)
                 <option value="{{ $c }}" {{ request('class')== $c ? 'selected' : '' }}>
@@ -38,7 +38,7 @@
         <select name="alignment"
                 id="alignment"
                 x-model="cls"
-                class="border rounded px-3 py-2">
+                class="custom-select">
             <option value="">All Alignments</option>
             @foreach(\App\Models\Npc::ALIGNMENTS as $a)
                 <option value="{{ $a }}" {{ request('alignment')== $a ? 'selected' : '' }}>
@@ -51,7 +51,7 @@
         <select name="role"
                 id="role"
                 x-model="cls"
-                class="border rounded px-3 py-2">
+                class="custom-select">
             <option value="">All Roles</option>
             @foreach(\App\Models\Npc::SOCIAL_ROLES as $r)
                 <option value="{{ $r }}" {{ request('role')== $r ? 'selected' : '' }}>
@@ -61,11 +61,11 @@
         </select>
 
         <button type="submit"
-                class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                class="bg-purple-800 text-white px-4 py-2 rounded hover:bg-purple-900 font-medium">
             Search
         </button>
         <a href="{{ route('compendium.npcs.index') }}"
-            class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+            class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 text-center font-medium">
             Reset
         </a>
     </form>
@@ -92,11 +92,11 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $npc->race ?? '—' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                   <a href="{{ route('compendium.npcs.show', $npc) }}"
-                     class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+                     class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
                     View
                   </a>
                   <a href="{{ route('compendium.npcs.edit', $npc) }}"
-                     class="ml-4 text-yellow-600 hover:text-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+                     class="ml-4 text-yellow-600 hover:text-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-300 font-medium">
                     Edit
                   </a>
                   <form action="{{ route('compendium.npcs.destroy', $npc) }}" method="POST" class="inline ml-4"
@@ -104,7 +104,7 @@
                     @csrf
                     @method('DELETE')
                     <button type="submit"
-                            class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-300">
+                            class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-300 font-medium">
                       Delete
                     </button>
                   </form>
@@ -135,7 +135,7 @@
               </p>
             </div>
             <a href="{{ route('compendium.npcs.show', $npc) }}"
-               class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+               class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
               View
             </a>
           </div>
