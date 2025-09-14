@@ -3,6 +3,16 @@
 
 @section('content')
 <div class="max-w-5xl mx-auto bg-white shadow rounded-lg p-6">
+    {{-- Back link --}}
+    <a href="{{ route('compendium.npcs.index') }}"
+       class="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-900 mb-4">
+      <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back to Compendium
+    </a>
     <h1 class="text-2xl font-bold mb-6">Create NPC</h1>
 
     @if ($errors->any())
@@ -27,12 +37,32 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <x-form.field label="Name" name="name" required />
                 <x-form.field label="Alias" name="alias" />
-                <x-form.field label="Race" name="race" />
-                <x-form.field label="Class" name="class" />
-                <x-form.field label="Role" name="role" />
-                <x-form.field label="Alignment" name="alignment" />
+                <x-form.select
+                    name="race"
+                    label="Race/Species"
+                    :options="\App\Models\Npc::raceOptions()"
+                    placeholder="Choose Race/Species" />
+                <x-form.select
+                    name="class"
+                    label="Class"
+                    :options="\App\Models\Npc::classOptions()"
+                    placeholder="Choose Class" />
+                <x-form.select
+                    name="role"
+                    label="Role"
+                    :options="\App\Models\Npc::socialRoleOptions()"
+                    placeholder="Choose Role" />
+                <x-form.select
+                    name="alignment"
+                    label="Alignment"
+                    :options="\App\Models\Npc::alignmentOptions()"
+                    placeholder="Choose Alignment" />
                 <x-form.field label="Location" name="location" />
-                <x-form.field label="Status" name="status" value="Alive" />
+                <x-form.select
+                    label="Status"
+                    name="status"
+                    :options="\App\Models\Npc::statusOptions()"
+                    placeholder="Choose Status" />
 
                 {{-- Portrait upload --}}
                 <div>

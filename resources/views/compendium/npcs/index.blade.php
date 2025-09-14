@@ -10,6 +10,62 @@
       </a>
     </div>
 
+    <form x-data="{ q: '{{ request('q') }}' }" method="GET" class="mb-4 flex gap-4">
+        <!-- Name search -->
+        <input
+            name="q"
+            x-model="q"
+            type="text"
+            placeholder="Search by name…"
+            value="{{ request('q') }}"
+            class="border rounded px-3 py-2 flex-1"
+        />
+
+        <!-- Class filter -->
+        <select name="class"
+                id="class"
+                x-model="cls"
+                class="border rounded px-3 py-2">
+            <option value="">All Classes</option>
+            @foreach(\App\Models\Npc::CLASSES as $c)
+                <option value="{{ $c }}" {{ request('class')== $c ? 'selected' : '' }}>
+                    {{ $c }}
+                </option>
+            @endforeach
+        </select>
+
+        <!-- Alignment filter -->
+        <select name="alignment"
+                id="alignment"
+                x-model="cls"
+                class="border rounded px-3 py-2">
+            <option value="">All Alignments</option>
+            @foreach(\App\Models\Npc::ALIGNMENTS as $a)
+                <option value="{{ $a }}" {{ request('alignment')== $a ? 'selected' : '' }}>
+                    {{ $a }}
+                </option>
+            @endforeach
+        </select>
+
+        <!-- Roles filter -->
+        <select name="role"
+                id="role"
+                x-model="cls"
+                class="border rounded px-3 py-2">
+            <option value="">All Roles</option>
+            @foreach(\App\Models\Npc::SOCIAL_ROLES as $r)
+                <option value="{{ $r }}" {{ request('role')== $r ? 'selected' : '' }}>
+                    {{ $r }}
+                </option>
+            @endforeach
+        </select>
+
+        <button type="submit"
+                class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+            Search
+        </button>
+    </form>
+
     {{-- Desktop Table --}}
     <div class="hidden sm:block overflow-x-auto">
       <div class="min-w-full bg-white border border-gray-200 shadow-sm sm:rounded-lg">
