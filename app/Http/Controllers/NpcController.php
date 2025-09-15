@@ -14,7 +14,7 @@ class NpcController extends Controller
         $query = Npc::query();
 
         if ($request->filled('q')) {
-            $query->where('name', 'like', '%'.$request->q.'%');
+            $query->where('name', 'like', '%' . $request->q . '%');
         }
 
         if ($request->filled('class')) {
@@ -32,8 +32,14 @@ class NpcController extends Controller
         $npcs = $query
             ->orderBy('name')
             ->paginate(15)
-            ->appends($request->only(['q','class','alignment','role']));
+            ->appends($request->only(['q', 'class', 'alignment', 'role']));
 
+        // If it's an AJAX request, return only the partial
+        if ($request->ajax()) {
+            return view('compendium.npcs.partials.results', compact('npcs'));
+        }
+
+        // Otherwise, return the full page
         return view('compendium.npcs.index', compact('npcs'));
     }
 
