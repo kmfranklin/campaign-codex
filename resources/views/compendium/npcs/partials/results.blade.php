@@ -74,3 +74,11 @@
         <p class="text-center text-gray-700">No NPCs found.</p>
     @endforelse
 </div>
+
+{{-- Pagination Links --}}
+@if ($npcs->hasPages())
+    <div id="pagination-links" class="mt-4">
+        {{ $npcs->links() }}
+    </div>
+@endif
+

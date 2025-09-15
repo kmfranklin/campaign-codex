@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Npc;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +13,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $devUser = User::factory()->create([
+            'name' => 'Kevin',
+            'email' => 'kevin@example.com',
+            'password' => bcrypt('password'),
         ]);
+
+        // Give dev account 50 NPCs
+        Npc::factory()->count(50)->create([
+            'user_id' => $devUser->id,
+        ]);
+
+        // Create 2 more random users
+        $otherUsers = User::factory()->count(2)->create();
+
+        // Give each of them 50 NPCs
+        foreach ($otherUsers as $user) {
+            Npc::factory()->count(50)->create([
+                'user_id' => $user->id,
+            ]);
+        }
     }
 }
