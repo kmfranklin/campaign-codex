@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
 
             // Relationships
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('campaign_id')->nullable();
 
             // Core identity
@@ -22,10 +23,10 @@ return new class extends Migration
             $table->string('alias')->nullable();
             $table->string('race')->nullable();
             $table->string('class')->nullable();
-            $table->string('role')->nullable(); // narrative role (shopkeep, militia, etc.)
+            $table->string('role')->nullable();
             $table->string('alignment')->nullable();
             $table->string('location')->nullable();
-            $table->string('status')->default('Alive'); // Alive, Deceased, Missing, Unknown
+            $table->string('status')->default('Alive');
             $table->string('portrait_path')->nullable();
 
             // Descriptive fields
@@ -48,9 +49,9 @@ return new class extends Migration
             $table->tinyInteger('proficiency_bonus')->nullable();
 
             // Flexible JSON fields for abilities/skills/saves
-            $table->json('abilities_json')->nullable();       // special abilities, actions, traits
-            $table->json('saving_throws_json')->nullable();   // overrides for saves
-            $table->json('skills_json')->nullable();          // skill proficiencies
+            $table->json('abilities_json')->nullable();
+            $table->json('saving_throws_json')->nullable();
+            $table->json('skills_json')->nullable();
 
             $table->timestamps();
         });

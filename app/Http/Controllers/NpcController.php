@@ -11,7 +11,7 @@ class NpcController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Npc::query();
+        $query = $request->user()->npcs();
 
         if ($request->filled('q')) {
             $query->where('name', 'like', '%' . $request->q . '%');
@@ -34,13 +34,9 @@ class NpcController extends Controller
             ->paginate(15)
             ->appends($request->only(['q', 'class', 'alignment', 'role']));
 
-        // If it's an AJAX request, return only the partial
-        if ($request->ajax()) {
-            return view('compendium.npcs.partials.results', compact('npcs'));
-        }
-
-        // Otherwise, return the full page
-        return view('compendium.npcs.index', compact('npcs'));
+        return $request->ajax()
+            ? view('compendium.npcs.partials.results', compact('npcs'))
+            : view('compendium.npcs.index', compact('npcs'));
     }
 
     public function create()
@@ -51,30 +47,33 @@ class NpcController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate($this->rules());
-
         $this->handlePortraitUpload($request, $data);
 
-        $npc = Npc::create($data);
+        // Assign ownership automatically
+        $npc = $request->user()->npcs()->create($data);
 
         return redirect()
             ->route('compendium.npcs.show', $npc)
             ->with('success', 'NPC created successfully.');
     }
 
-    public function show(Npc $npc)
+    public function show(Request $request, $npcId)
     {
+        $npc = $request->user()->npcs()->findOrFail($npcId);
         return view('compendium.npcs.show', compact('npc'));
     }
 
-    public function edit(Npc $npc)
+    public function edit(Request $request, $npcId)
     {
+        $npc = $request->user()->npcs()->findOrFail($npcId);
         return view('compendium.npcs.edit', compact('npc'));
     }
 
-    public function update(Request $request, Npc $npc)
+    public function update(Request $request, $npcId)
     {
-        $data = $request->validate($this->rules(true));
+        $npc = $request->user()->npcs()->findOrFail($npcId);
 
+        $data = $request->validate($this->rules(true));
         $this->handlePortraitUpload($request, $data, $npc);
 
         $npc->update($data);
@@ -84,11 +83,12 @@ class NpcController extends Controller
             ->with('success', 'NPC updated successfully.');
     }
 
-    public function destroy(Npc $npc)
+    public function destroy(Request $request, $npcId)
     {
+        $npc = $request->user()->npcs()->findOrFail($npcId);
+
         if ($npc->portrait_path) {
-            Storage::disk('public')
-                ->delete(str_replace('/storage/', '', $npc->portrait_path));
+            Storage::disk('public')->delete(str_replace('/storage/', '', $npc->portrait_path));
         }
 
         $npc->delete();
@@ -98,9 +98,6 @@ class NpcController extends Controller
             ->with('success', 'NPC deleted successfully.');
     }
 
-    /**
-     * Shared validation rules for store/update.
-     */
     private function rules(bool $isUpdate = false): array
     {
         return [
@@ -135,26 +132,18 @@ class NpcController extends Controller
         ];
     }
 
-    /**
-     * Handle portrait upload/removal for store/update.
-     */
     private function handlePortraitUpload(Request $request, array &$data, ?Npc $npc = null): void
     {
-        // Remove portrait if requested (update only)
         if ($npc && $request->boolean('remove_portrait') && $npc->portrait_path) {
-            Storage::disk('public')
-                ->delete(str_replace('/storage/', '', $npc->portrait_path));
+            Storage::disk('public')->delete(str_replace('/storage/', '', $npc->portrait_path));
             $data['portrait_path'] = null;
         }
 
-        // Upload new portrait
         if ($request->hasFile('portrait')) {
             if ($npc && $npc->portrait_path) {
-                Storage::disk('public')
-                    ->delete(str_replace('/storage/', '', $npc->portrait_path));
+                Storage::disk('public')->delete(str_replace('/storage/', '', $npc->portrait_path));
             }
-            $path = $request->file('portrait')
-                            ->store('npc-portraits', 'public');
+            $path = $request->file('portrait')->store('npc-portraits', 'public');
             $data['portrait_path'] = '/storage/' . $path;
         }
     }
