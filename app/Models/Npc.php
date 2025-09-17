@@ -41,10 +41,22 @@ class Npc extends Model
     ];
 
     protected $fillable = [
-        'campaign_id', 'name', 'alias', 'race', 'class', 'role', 'alignment', 'location', 'status', 'portrait_path',
+        'user_id', 'campaign_id', 'name', 'alias', 'race', 'class', 'role', 'alignment', 'location', 'status', 'portrait_path',
         'description', 'personality', 'quirks',
         'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma',
         'armor_class', 'hit_points', 'speed', 'challenge_rating', 'proficiency_bonus',
+    ];
+
+    protected $casts = [
+        'strength' => 'integer',
+        'dexterity' => 'integer',
+        'constitution' => 'integer',
+        'intelligence' => 'integer',
+        'wisdom' => 'integer',
+        'charisma' => 'integer',
+        'armor_class' => 'integer',
+        'hit_points' => 'integer',
+        'proficiency_bonus' => 'integer',
     ];
 
     // --- Option Accessors ---
@@ -75,5 +87,23 @@ class Npc extends Model
     public static function statusOptions(): array
     {
         return self::STATUSES;
+    }
+
+    // --- Relationships ---
+    public function campaign()
+    {
+        return $this->belongsTo(Campaign::class);
+    }
+
+    public function quests()
+    {
+        return $this->belongsToMany(Quest::class, 'quest_npc')
+                    ->withPivot('role')
+                    ->withTimestamps();
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class);
     }
 }

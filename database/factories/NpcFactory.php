@@ -17,7 +17,7 @@ class NpcFactory extends Factory
             'Lawful Neutral', 'Neutral', 'Chaotic Neutral',
             'Lawful Evil', 'Neutral Evil', 'Chaotic Evil'
         ];
-        $statuses   = ['Active', 'Retired', 'Deceased'];
+        $statuses   = ['Alive', 'Deceased', 'Unknown'];
         $races      = ['Human', 'Elf', 'Dwarf', 'Dragonborn', 'Gnome', 'Halfling', 'Tiefling', 'Orc', 'Half‑Elf', 'Half‑Orc'];
         $classes    = ['Wizard', 'Ranger', 'Cleric', 'Rogue', 'Bard', 'Paladin', 'Druid', 'Fighter', 'Monk', 'Warlock', 'Sorcerer', 'Barbarian'];
 
