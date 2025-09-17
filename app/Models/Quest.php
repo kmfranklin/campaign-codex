@@ -10,12 +10,14 @@ class Quest extends Model
 
     public function campaign()
     {
-        return $this->belongsTo(Campaign::class);
+        return $this->belongsToMany(Campaign::class, 'campaign_quest')
+                    ->withPivot('status')
+                    ->withTimestamps();
     }
 
     public function npcs()
     {
-        return $this->belongsToMany(Npc::class)
+        return $this->belongsToMany(Npc::class, 'quest_npc')
                     ->withPivot('role')
                     ->withTimestamps();
     }
