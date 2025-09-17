@@ -3,10 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Factories\BelongsToRelationship;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -47,9 +50,30 @@ class User extends Authenticatable
         ];
     }
 
-
     public function npcs(): HasMany
     {
         return $this->hasMany(Npc::class);
+    }
+
+    public function campaigns(): BelongsToMany
+    {
+        return $this->belongsToMany(Campaign::class)
+                    ->withPivot('role')
+                    ->withTimestamps();
+    }
+
+    public function campaignsAsDm(): BelongsToMany
+    {
+        return $this->campaigns()->wherePivot('role', 'dm');
+    }
+
+    public function campaignsAsPlayer(): BelongsToMany
+    {
+        return $this->campaigns()->wherePivot('role', 'player');
+    }
+
+    public function ownedCampaigns(): HasMany
+    {
+        return $this->hasMany(Campaign::class, 'dm_id');
     }
 }
