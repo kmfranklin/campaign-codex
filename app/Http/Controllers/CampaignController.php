@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 class CampaignController extends Controller
 {
     /**
+     * Map Campaign resource methods to their corresponding policy checks.
+     * - Ensures index, show, create, store, edit, update, and destroy
+     *   automatically call the correct CampaignPolicy method.
+     * - Keeps authorization logic centralized and consistent.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(\App\Models\Campaign::class, 'campaign');
+    }
+
+    /**
      * Display a listing of the campaigns the user can see.
      * - Later: paginate, filter, and scope by membership/visibility.
      */
@@ -86,19 +97,15 @@ class CampaignController extends Controller
      */
     public function addMember(Request $request, Campaign $campaign)
     {
-        // TODO: Authorize DM-only member management.
-        // TODO: Validate target user and desired role (e.g., player).
-        // TODO: Attach user to campaign with role on pivot.
+        $this->authorize('addMember', $campaign);
+
+        // TODO: Validate target user + role, attach via pivot
     }
 
-    /**
-     * Remove a member from the campaign.
-     * - DM-only; careful with self-removal/transfer of ownership.
-     */
     public function removeMember(Request $request, Campaign $campaign)
     {
-        // TODO: Authorize DM-only member management.
-        // TODO: Validate target user.
-        // TODO: Detach user from campaign.
+        $this->authorize('removeMember', $campaign);
+
+        // TODO: Validate target user, detach from pivot
     }
 }
