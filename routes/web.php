@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NpcController;
+use App\Http\Controllers\CampaignController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,5 +23,15 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('compendium/npcs', NpcController::class)->names('compendium.npcs');
 });
+
+Route::resource('campaigns', CampaignController::class);
+
+// Member management routes
+Route::post('campaigns/{campaign}/members', [CampaignController::class, 'addMember'])
+    ->name('campaigns.members.add');
+
+Route::delete('campaigns/{campaign}/members', [CampaignController::class, 'removeMember'])
+    ->name('campaigns.members.remove');
+
 
 require __DIR__.'/auth.php';
