@@ -25,8 +25,8 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        // TODO: Fetch campaigns visible to the current user (e.g., member or public).
-        // TODO: Return a Blade view with a paginated list.
+        $campaigns = Campaign::latest()->paginate(10);
+        return view('campaigns.index', compact('campaigns'));
     }
 
     /**
