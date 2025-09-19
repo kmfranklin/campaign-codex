@@ -37,7 +37,7 @@ class CampaignPolicy
      */
     public function update(User $user, Campaign $campaign): bool
     {
-        return false;
+        return true;
     }
 
     /**

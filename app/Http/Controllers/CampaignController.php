@@ -6,6 +6,7 @@ use App\Models\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCampaignRequest;
 use App\Http\Requests\UpdateCampaignRequest;
+use Illuminate\Support\Facades\Auth;
 class CampaignController extends Controller
 {
     /**
@@ -40,17 +41,21 @@ class CampaignController extends Controller
 
     /**
      * Store a newly created campaign in storage.
-     * - Validate via FormRequest later.
-     * - Set current user as DM/owner in pivot/user role.
+     * - Uses StoreCampaignRequest for validation (rules TBD).
+     * - Sets current user as DM/owner in pivot/user role.
      */
     public function store(StoreCampaignRequest $request)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
         $campaign = Campaign::create([
-            'name' => $request->input('name'),
+            'name'        => $request->input('name'),
             'description' => $request->input('description'),
+            'dm_id'       => $user->id,
         ]);
 
-        $campaign->members()->attach(auth()->id, ['role' => 'dm']);
+        $campaign->members()->attach($user->id, ['role' => 'dm']);
 
         return redirect()
             ->route('campaigns.show', $campaign)
@@ -73,8 +78,7 @@ class CampaignController extends Controller
      */
     public function edit(Campaign $campaign)
     {
-        // TODO: Authorize DM-only edit.
-        // TODO: Return a Blade view with an edit form.
+        return view('campaigns.edit', compact('campaign'));
     }
 
     /**
@@ -83,7 +87,14 @@ class CampaignController extends Controller
      */
     public function update(UpdateCampaignRequest $request, Campaign $campaign)
     {
-        // TODO: Update campaign and redirect with success message.
+        $campaign->update([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+        ]);
+
+        return redirect()
+            ->route('campaigns.show', $campaign)
+            ->with('success', 'Campaign updated successfully.');
     }
 
     /**
