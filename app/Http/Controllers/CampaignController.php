@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Campaign;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\StoreCampaignRequest;
+use App\Http\Requests\UpdateCampaignRequest;
 class CampaignController extends Controller
 {
     /**
@@ -43,7 +44,7 @@ class CampaignController extends Controller
      * - Validate via FormRequest later.
      * - Set current user as DM/owner in pivot/user role.
      */
-    public function store(Request $request)
+    public function store(StoreCampaignRequest $request)
     {
         // TODO: Validate input (use a FormRequest in a later step).
         // TODO: Create campaign and attach current user as DM/owner.
@@ -74,10 +75,8 @@ class CampaignController extends Controller
      * Update the specified campaign in storage.
      * - Validate via FormRequest; authorize via policy.
      */
-    public function update(Request $request, Campaign $campaign)
+    public function update(UpdateCampaignRequest $request, Campaign $campaign)
     {
-        // TODO: Authorize DM-only update.
-        // TODO: Validate input (use a FormRequest in a later step).
         // TODO: Update campaign and redirect with success message.
     }
 
