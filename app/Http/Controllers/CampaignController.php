@@ -63,8 +63,8 @@ class CampaignController extends Controller
      */
     public function show(Campaign $campaign)
     {
-        // TODO: Authorize view based on membership/visibility.
-        // TODO: Return a Blade view showing campaign details.
+        $campaign->load('members');
+        return view('campaigns.show', compact('campaign'));
     }
 
     /**
