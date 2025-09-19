@@ -103,8 +103,11 @@ class CampaignController extends Controller
      */
     public function destroy(Campaign $campaign)
     {
-        // TODO: Authorize DM-only delete.
-        // TODO: Delete campaign and redirect with success message.
+        $campaign->delete();
+
+        return redirect()
+            ->route('campaigns.index')
+            ->with('success', 'Campaign deleted successfully.');
     }
 
     /**
