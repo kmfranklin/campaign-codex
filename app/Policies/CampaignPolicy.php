@@ -4,12 +4,12 @@ namespace App\Policies;
 
 use App\Models\Campaign;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CampaignPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the user can view any campaigns.
+     * For now, allow all authenticated users to see the index.
      */
     public function viewAny(User $user): bool
     {
@@ -17,7 +17,8 @@ class CampaignPolicy
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view the campaign.
+     * For now, allow all authenticated users to view.
      */
     public function view(User $user, Campaign $campaign): bool
     {
@@ -25,7 +26,8 @@ class CampaignPolicy
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can create campaigns.
+     * Allow any authenticated user to create.
      */
     public function create(User $user): bool
     {
@@ -33,52 +35,54 @@ class CampaignPolicy
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update the campaign.
+     * Only the DM/owner can update.
      */
     public function update(User $user, Campaign $campaign): bool
     {
-        return true;
+        return $campaign->dm_id === $user->id;
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can delete the campaign.
+     * Only the DM/owner can delete.
      */
     public function delete(User $user, Campaign $campaign): bool
     {
-        return true;
+        return $campaign->dm_id === $user->id;
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can restore the campaign.
+     * Only the DM/owner can restore.
      */
     public function restore(User $user, Campaign $campaign): bool
     {
-        return false;
+        return $campaign->dm_id === $user->id;
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can permanently delete the campaign.
+     * Only the DM/owner can force delete.
      */
     public function forceDelete(User $user, Campaign $campaign): bool
     {
-        return false;
+        return $campaign->dm_id === $user->id;
     }
 
     /**
-     * Determine whether the user can add a member to the campaign.
+     * Custom: Determine whether the user can add members.
      */
     public function addMember(User $user, Campaign $campaign): bool
     {
-        // TODO: Check if user is DM of this campaign
-        return false; // Temporary: deny until role checks are implemented
+        return $campaign->dm_id === $user->id;
     }
 
     /**
-     * Determine whether the user can remove a member from the campaign.
+     * Custom: Determine whether the user can remove members.
      */
     public function removeMember(User $user, Campaign $campaign): bool
     {
-        // TODO: Check if user is DM of this campaign
-        return false; // Temporary: deny until role checks are implemented
+        return $campaign->dm_id === $user->id;
     }
 }
