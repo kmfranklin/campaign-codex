@@ -35,8 +35,7 @@ class CampaignController extends Controller
      */
     public function create()
     {
-        // TODO: Authorize DM-only creation.
-        // TODO: Return a Blade view with a create form.
+        return view('campaigns.create');
     }
 
     /**
@@ -46,9 +45,16 @@ class CampaignController extends Controller
      */
     public function store(StoreCampaignRequest $request)
     {
-        // TODO: Validate input (use a FormRequest in a later step).
-        // TODO: Create campaign and attach current user as DM/owner.
-        // TODO: Redirect to show with success message.
+        $campaign = Campaign::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+        ]);
+
+        $campaign->members()->attach(auth()->id, ['role' => 'dm']);
+
+        return redirect()
+            ->route('campaigns.show', $campaign)
+            ->with('success', 'Campaign created successfully.');
     }
 
     /**
