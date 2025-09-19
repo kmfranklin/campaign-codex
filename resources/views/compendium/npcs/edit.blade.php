@@ -4,7 +4,7 @@
 <div class="max-w-5xl mx-auto bg-white shadow rounded-lg p-6">
     {{-- Back link --}}
     <a href="{{ route('compendium.npcs.index') }}"
-       class="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-900 mb-4">
+       class="inline-flex items-center text-sm text-purple-600 hover:text-purple-900 mb-4 font-medium">
       <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
            viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -103,7 +103,7 @@
         {{-- Submit --}}
         <div class="pt-4 border-t flex justify-between">
             <a href="{{ route('compendium.npcs.show', $npc) }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</a>
-            <button type="submit" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <button type="submit" class="px-6 py-2 bg-purple-800 text-white font-semibold rounded hover:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
                 Update NPC
             </button>
         </div>
