@@ -19,23 +19,32 @@
                             {{ Str::limit($campaign->description, 80) ?? '—' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            {{-- View is always visible --}}
                             <a href="{{ route('campaigns.show', $campaign) }}"
-                               class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
+                               class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300                       font-medium">
                                 View
                             </a>
-                            <a href="{{ route('campaigns.edit', $campaign) }}"
-                               class="ml-4 text-yellow-600 hover:text-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-300 font-medium">
-                                Edit
-                            </a>
-                            <form action="{{ route('campaigns.destroy', $campaign) }}" method="POST" class="inline ml-4"
-                                  onsubmit="return confirm('Delete this campaign?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                        class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-300 font-medium">
-                                    Delete
-                                </button>
-                            </form>
+
+                            {{-- Only show Edit if authorized --}}
+                            @can('update', $campaign)
+                                <a href="{{ route('campaigns.edit', $campaign) }}"
+                                   class="ml-4 text-yellow-600 hover:text-yellow-900 focus:outline-none focus:ring-2                        focus:ring-yellow-300 font-medium">
+                                    Edit
+                                </a>
+                            @endcan
+
+                            {{-- Only show Delete if authorized --}}
+                            @can('delete', $campaign)
+                                <form action="{{ route('campaigns.destroy', $campaign) }}" method="POST" class="inline ml-4"
+                                      onsubmit="return confirm('Delete this campaign?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-300                       font-medium">
+                                        Delete
+                                    </button>
+                                </form>
+                            @endcan
                         </td>
                     </tr>
                 @empty

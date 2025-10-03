@@ -19,6 +19,10 @@
                                 :active="request()->routeIs('compendium.npcs.*')">
                         {{ __('Character Compendium') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('campaigns.index') }}"
+                                :active="request()->routeIs('campaigns.*')">
+                        {{ __('Campaigns') }}
+                    </x-nav-link>
                 </div>
             </div>
 
