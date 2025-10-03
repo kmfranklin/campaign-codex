@@ -71,8 +71,17 @@
             ];
         @endphp
 
-        @foreach($sections as $i => $section)
-            <x-detail-block :title="$section['title']" :index="$i">
+       @foreach($sections as $i => $section)
+            <x-detail-block :title="$section['title']" :index="$i"  :last="$loop->last">
+                @if($section['title'] === 'Quests')
+                    <x-slot name="actions">
+                        <a href="{{ route('campaigns.quests.create', $campaign) }}"
+                           class="inline-flex items-center px-3 py-2    bg-purple-600  hover:bg-purple-700 text-white text-sm  rounded">
+                            + Add quest
+                        </a>
+                    </x-slot>
+                @endif
+
                 @include($section['view'])
             </x-detail-block>
         @endforeach

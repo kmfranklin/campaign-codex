@@ -1,10 +1,26 @@
-@props(['title', 'index' => 0])
+@props([
+    'title',
+    'index' => null,
+    'last' => false,
+])
 
-@php
-    $bg = $index % 2 === 0 ? 'white' : 'gray-50';
-@endphp
+<div @class([
+    'px-6 py-4',
+    'border-b border-gray-200' => !$last,
+])>
+    <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold text-gray-800">
+            {{ $title }}
+        </h2>
 
-<div class="p-6 bg-{{ $bg }} border-b border-gray-200">
-    <h2 class="text-lg font-semibold text-gray-700 mb-4">{{ $title }}</h2>
-    {{ $slot }}
+        @isset($actions)
+            <div>
+                {{ $actions }}
+            </div>
+        @endisset
+    </div>
+
+    <div>
+        {{ $slot }}
+    </div>
 </div>
