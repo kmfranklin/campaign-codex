@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NpcController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\QuestController;
 
 
 Route::get('/', function () {
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('campaigns', CampaignController::class);
+Route::resource('campaigns.quests', QuestController::class);
 
 // Member management routes
 Route::post('campaigns/{campaign}/members', [CampaignController::class, 'addMember'])
