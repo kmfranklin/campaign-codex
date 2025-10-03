@@ -1,7 +1,4 @@
-@props([
-    'title',
-    'index' => 0,
-])
+@props(['title', 'index' => 0])
 
 @php
     $bg = $index % 2 === 0 ? 'white' : 'gray-50';

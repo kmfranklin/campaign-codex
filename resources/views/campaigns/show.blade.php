@@ -62,67 +62,20 @@
         @endif
         {{-- /DESCRIPTION --}}
 
-        {{-- MEMBERS --}}
-        <x-detail-block title="Members" :index="0">
-            @if($campaign->members->count())
-                <ul class="space-y-2">
-                    @foreach($campaign->members as $member)
-                        <li class="flex items-center justify-between">
-                            <span class="text-gray-800">{{ $member->name }}</span>
-                            @php
-                                $role = $member->pivot->role === 'dm' ? 'DM' : ucfirst      ($member->pivot->role);
-                            @endphp
-                            <span class="text-xs text-gray-500">{{ $role }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-            @else
-                <x-empty-state
-                    icon="👥"
-                    title="No members yet"
-                    message="Invite players to join your campaign."
-                />
-            @endif
-        </x-detail-block>
-        {{-- /MEMBERS --}}
+        {{-- LOOPED SECTIONS --}}
+        @php
+            $sections = [
+                ['title' => 'Members', 'view' => 'campaigns.partials.members'],
+                ['title' => 'Quests',  'view' => 'campaigns.partials.quests'],
+                ['title' => 'NPCs',    'view' => 'campaigns.partials.npcs'],
+            ];
+        @endphp
 
-        {{-- QUESTS --}}
-        <x-detail-block title="Quests" :index="1">
-            @if(isset($campaign->quests) && $campaign->quests->count())
-                <ul class="space-y-2">
-                    @foreach($campaign->quests as $quest)
-                        <li class="text-gray-800">{{ $quest->title }}</li>
-                    @endforeach
-                </ul>
-            @else
-                <x-empty-state
-                    icon="🗺️"
-                    title="No quests yet"
-                    message="Start your adventure by creating the first quest."
-                />
-            @endif
-        </x-detail-block>
-        {{-- /QUESTS --}}
-
-        {{-- NPCS --}}
-        <x-detail-block title="NPCs" :index="2">
-            @if(isset($campaign->npcs) && $campaign->npcs->count())
-                <ul class="space-y-2">
-                    @foreach($campaign->npcs as $npc)
-                        <li class="text-gray-800">{{ $npc->name }}</li>
-                    @endforeach
-                </ul>
-            @else
-                <x-empty-state
-                    icon="🧙"
-                    title="No NPCs yet"
-                    message="Bring your world to life by adding characters."
-                />
-            @endif
-        </x-detail-block>
-        {{-- /NPCS --}}
-
-        {{-- FUTURE: Encounters will live under Quest detail pages --}}
+        @foreach($sections as $i => $section)
+            <x-detail-block :title="$section['title']" :index="$i">
+                @include($section['view'])
+            </x-detail-block>
+        @endforeach
     </div>
 </div>
 @endsection
