@@ -10,14 +10,7 @@
     @include('layouts.navigation')
 
     <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
-        @if (session('success'))
-            <div x-data="{ show: true }" x-show="show"
-                x-transition
-                class="mb-6 p-4 bg-green-100 border border-green-300 text-green-800 rounded flex justify-between items-center">
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
-
+        <x-flash />
         @yield('content')
     </main>
 
