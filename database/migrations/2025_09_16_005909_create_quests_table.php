@@ -15,7 +15,7 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->string('name');
+            $table->string('title');
             $table->text('description')->nullable();
 
             // Keep status flexible as string; enforce via validation/UI

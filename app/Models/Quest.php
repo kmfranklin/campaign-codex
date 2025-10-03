@@ -2,23 +2,44 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Quest extends Model
 {
-    protected $fillable = ['campaign_id', 'name', 'description', 'status'];
+    use HasFactory;
 
+    protected $fillable = [
+        'campaign_id',
+        'title',
+        'description',
+        'status',
+    ];
+
+    /**
+     * Each quest belongs to one campaign.
+     */
     public function campaign()
     {
-        return $this->belongsToMany(Campaign::class, 'campaign_quest')
-                    ->withPivot('status')
-                    ->withTimestamps();
+        return $this->belongsTo(Campaign::class);
     }
 
+    /**
+     * Placeholder for future NPC relationships.
+     */
     public function npcs()
     {
         return $this->belongsToMany(Npc::class, 'quest_npc')
                     ->withPivot('role')
                     ->withTimestamps();
+    }
+
+    /**
+     * Placeholder for future encounters.
+     * Each quest will eventually have many encounters.
+     */
+    public function encounters()
+    {
+        return $this->hasMany(Encounter::class);
     }
 }

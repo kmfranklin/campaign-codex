@@ -36,9 +36,7 @@ class Campaign extends Model
     // Quests in this campaign
     public function quests()
     {
-        return $this->belongsToMany(Quest::class, 'campaign_quest')
-                    ->withPivot('status')
-                    ->withTimestamps();
+        return $this->hasMany(Quest::class);
     }
 
     // Campaign‑wide NPCs
