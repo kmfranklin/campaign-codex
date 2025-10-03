@@ -1,23 +1,19 @@
-@if(session()->has('success'))
-    <div class="mb-4 rounded bg-green-100 border border-green-300 text-green-800 px-4 py-2">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if(session()->has('error'))
-    <div class="mb-4 rounded bg-red-100 border border-red-300 text-red-800 px-4 py-2">
-        {{ session('error') }}
-    </div>
-@endif
-
-@if(session()->has('warning'))
-    <div class="mb-4 rounded bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-2">
-        {{ session('warning') }}
-    </div>
-@endif
-
-@if(session()->has('info'))
-    <div class="mb-4 rounded bg-blue-100 border border-blue-300 text-blue-800 px-4 py-2">
-        {{ session('info') }}
-    </div>
-@endif
+@foreach (['success' => 'green', 'error' => 'red', 'warning' => 'yellow', 'info' => 'blue'] as $type => $color)
+    @if(session()->has($type))
+        <div
+            x-data="{ show: true }"
+            x-show="show"
+            x-transition
+            class="mb-4 flex items-center justify-between rounded border border-{{ $color }}-300 bg-{{ $color }}-100 px-4 py-2 text-{{ $color }}-800"
+        >
+            <span>{{ session($type) }}</span>
+            <button
+                @click="show = false"
+                class="ml-4 text-{{ $color }}-600 hover:text-{{ $color }}-900"
+                aria-label="Dismiss"
+            >
+                &times;
+            </button>
+        </div>
+    @endif
+@endforeach
