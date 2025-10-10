@@ -114,4 +114,19 @@ class QuestController extends Controller
             ->route('campaigns.quest.show', [$campaign, $quest])
             ->with('success', 'NPC linked to quest.');
     }
+
+    /**
+     * Detach NPC from quest.
+     */
+    public function detachNpc(Campaign $campaign, Quest $quest, Npc $npc)
+    {
+        $this->authorize('update', $campaign);
+
+        $quest->npcs()->detach($npc->id);
+
+        return redirect()
+            ->route('campaigns.quests.show', [$campaign, $quest])
+            ->with('success', 'NPC detached from quest.');
+    }
+
 }

@@ -32,6 +32,9 @@ Route::resource('campaigns.quests', QuestController::class);
 Route::post('campaigns/{campaign}/quests/{quest}/npcs', [QuestController::class, 'attachNpc'])
     ->name('campaigns.quests.npcs.attach');
 
+Route::delete('campaigns/{campaign}/quests/{quest}/npcs', [QuestController::class, 'detachNpc'])
+    ->name('campaigns.quests.npcs.detach');
+
 // Member management routes
 Route::post('campaigns/{campaign}/members', [CampaignController::class, 'addMember'])
     ->name('campaigns.members.add');
