@@ -61,7 +61,7 @@
 
         {{-- Actions --}}
         <div class="pt-4 border-t flex justify-between">
-            <a href="{{ route('campaigns.show', $campaign) }}"
+            <a href="{{ route('campaigns.quests.show', [$campaign, $quest]) }}"
                class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
                 Cancel
             </a>

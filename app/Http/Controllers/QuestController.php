@@ -74,7 +74,7 @@ class QuestController extends Controller
         $quest->update($validated);
 
         return redirect()
-            ->route('campaigns.show', $campaign)
+            ->route('campaigns.quests.show', [$campaign, $quest])
             ->with('success', 'Quest updated successfully.');
     }
 
