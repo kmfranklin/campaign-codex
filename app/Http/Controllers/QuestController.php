@@ -51,7 +51,10 @@ class QuestController extends Controller
     public function show(Campaign $campaign, Quest $quest)
     {
         $attachedIds = $quest->npcs()->pluck('npcs.id');
-        $availableNpcs = Npc::whereNotIn('id', $attachedIds)->orderBy('name')->get();
+        $availableNpcs = Npc::where('user_id', auth()->id())
+            ->whereNotIn('id', $attachedIds)
+            ->orderBy('name')
+            ->get();
 
         return view('quests.show', compact('campaign', 'quest', 'availableNpcs'));
     }
