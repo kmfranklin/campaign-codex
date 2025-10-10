@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Campaign;
 use App\Models\Quest;
-use Illuminate\Http\Request;
+use App\Models\Npc;
 
 class QuestController extends Controller
 {
@@ -88,5 +89,26 @@ class QuestController extends Controller
         return redirect()
             ->route('campaigns.show', $campaign)
             ->with('success', 'Quest deleted successfully.');
+    }
+
+    /**
+     * Attach NPC to quest.
+     */
+    public function attachNpc(Request $request, Campaign $campaign, Quest $quest)
+    {
+        $this->authorize('update', $campaign);
+
+        $validated = $request->validate([
+            'npc_id' => ['required', 'exists:npc,id'],
+            'role'   => ['nullable', 'string', 'max:50'],
+        ]);
+
+        $quest->npcs()->syncWithoutDetaching([
+            $validated['npc_id'] => ['role' => $validated['role'] ?? null],
+        ]);
+
+        return redirect()
+            ->route('campaigns.quest.show', [$campaign, $quest])
+            ->with('success', 'NPC linked to quest.');
     }
 }
