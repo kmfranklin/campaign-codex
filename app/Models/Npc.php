@@ -59,6 +59,8 @@ class Npc extends Model
         'proficiency_bonus' => 'integer',
     ];
 
+    protected $table = 'npcs';
+
     // --- Option Accessors ---
     public static function raceOptions(): array
     {

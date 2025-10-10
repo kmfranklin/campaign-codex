@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Str; @endphp
 {{-- NPCs involved --}}
 <div>
     <h2 class="text-lg font-semibold text-gray-700 mb-4">Involved NPCs</h2>
@@ -23,7 +24,7 @@
                                     </a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                    {{ $npc->pivot->role ?? '—' }}
+                                    {{ $npc->pivot->role ? Str::headline($npc->pivot->role) : '—' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     @can('update', $campaign)

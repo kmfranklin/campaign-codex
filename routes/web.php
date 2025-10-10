@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NpcController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\QuestController;
+use App\Models\Npc;
 
 
 Route::get('/', function () {
@@ -32,7 +33,7 @@ Route::resource('campaigns.quests', QuestController::class);
 Route::post('campaigns/{campaign}/quests/{quest}/npcs', [QuestController::class, 'attachNpc'])
     ->name('campaigns.quests.npcs.attach');
 
-Route::delete('campaigns/{campaign}/quests/{quest}/npcs', [QuestController::class, 'detachNpc'])
+Route::delete('campaigns/{campaign}/quests/{quest}/npcs/{npc}', [QuestController::class, 'detachNpc'])
     ->name('campaigns.quests.npcs.detach');
 
 // Member management routes

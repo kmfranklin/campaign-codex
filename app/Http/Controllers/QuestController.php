@@ -102,7 +102,7 @@ class QuestController extends Controller
         $this->authorize('update', $campaign);
 
         $validated = $request->validate([
-            'npc_id' => ['required', 'exists:npc,id'],
+            'npc_id' => ['required', 'exists:npcs,id'],
             'role'   => ['nullable', 'string', 'max:50'],
         ]);
 
@@ -111,7 +111,7 @@ class QuestController extends Controller
         ]);
 
         return redirect()
-            ->route('campaigns.quest.show', [$campaign, $quest])
+            ->route('campaigns.quests.show', [$campaign, $quest])
             ->with('success', 'NPC linked to quest.');
     }
 
