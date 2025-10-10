@@ -28,6 +28,10 @@ Route::middleware('auth')->group(function () {
 Route::resource('campaigns', CampaignController::class);
 Route::resource('campaigns.quests', QuestController::class);
 
+// NPC-Quest relationship routes
+Route::post('campaigns/{campaign}/quests/{quest}/npcs', [QuestController::class, 'attachNpc'])
+    ->name('campaigns.quests.npcs.attach');
+
 // Member management routes
 Route::post('campaigns/{campaign}/members', [CampaignController::class, 'addMember'])
     ->name('campaigns.members.add');
