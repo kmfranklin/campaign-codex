@@ -97,7 +97,7 @@ class Npc extends Model
 
     public function quests()
     {
-        return $this->belongsToMany(Quest::class, 'quest_npc')
+        return $this->belongsToMany(Quest::class, 'npc_quest')
                     ->withPivot('role')
                     ->withTimestamps();
     }
