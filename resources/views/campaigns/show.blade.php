@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
     {{-- Back link --}}
     <a href="{{ route('campaigns.index') }}"
        class="inline-flex items-center text-sm text-purple-800 hover:text-purple-900 mb-4 font-medium">
@@ -13,7 +13,7 @@
       Back to Campaigns
     </a>
 
-    <div class="max-w-4xl mx-auto bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
+    <div class="max-w-5xl mx-auto bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
         {{-- HEADER --}}
         <div class="flex flex-col sm:flex-row items-start bg-white p-6 border-b border-gray-200 sm:items-center">
             <div class="flex-1">
