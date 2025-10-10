@@ -1,0 +1,68 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    {{-- Back link --}}
+    <a href="{{ route('campaigns.show', $campaign) }}"
+       class="inline-flex items-center text-sm text-purple-800 hover:text-purple-900 mb-4 font-medium">
+      <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back to Campaign
+    </a>
+
+    <div class="max-w-5xl mx-auto bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
+        {{-- HEADER --}}
+        <div class="flex flex-col sm:flex-row items-start bg-white p-6 border-b border-gray-200 sm:items-center">
+            <div class="flex-1">
+                <div class="flex items-start">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">{{ $quest->title }}</h1>
+                        <p class="text-gray-600 mt-1">
+                            Status: <span class="font-medium text-gray-800">{{ ucfirst($quest->status) }}</span>
+                        </p>
+
+                        {{-- tags --}}
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <span class="bg-purple-50 text-purple-700 text-xs font-medium px-2 py-1 rounded">Quest</span>
+                        </div>
+                    </div>
+
+                    {{-- Top-right actions --}}
+                    <div class="ml-auto flex gap-2">
+                        @can('update', $campaign)
+                            <a href="{{ route('campaigns.quests.edit', [$campaign, $quest]) }}"
+                               class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
+                                Edit
+                            </a>
+                        @endcan
+                        @can('delete', $campaign)
+                            <form action="{{ route('campaigns.quests.destroy', [$campaign, $quest]) }}" method="POST"
+                                  onsubmit="return confirm('Delete this quest?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
+                                    Delete
+                                </button>
+                            </form>
+                        @endcan
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- /HEADER --}}
+
+        {{-- DESCRIPTION --}}
+        @if($quest->description)
+            <div class="p-6 bg-white border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4">Description</h2>
+                <p class="text-gray-800">{{ $quest->description }}</p>
+            </div>
+        @endif
+        {{-- /DESCRIPTION --}}
+    </div>
+</div>
+@endsection
