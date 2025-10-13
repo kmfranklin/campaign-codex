@@ -75,7 +75,7 @@
         {{-- Tab content --}}
         <div class="p-6">
             {{-- Overview tab --}}
-            <div x-show="tab === 'overview'" x-transition>
+            <div x-show="tab === 'overview'" x-cloak>
                 @if($campaign->description)
                     <div class="mb-6">
                         <h2 class="text-lg font-semibold text-gray-700 mb-2">Description</h2>
@@ -87,7 +87,7 @@
             </div>
 
             {{-- Quests tab --}}
-            <div x-show="tab === 'quests'" x-transition>
+            <div x-show="tab === 'quests'" x-cloak>
                 <div class="flex justify-end mb-4">
                     <a href="{{ route('campaigns.quests.create', $campaign) }}"
                        class="inline-flex items-center px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded">
@@ -99,7 +99,7 @@
             </div>
 
             {{-- NPCs tab --}}
-            <div x-show="tab === 'npcs'" x-transition>
+            <div x-show="tab === 'npcs'" x-cloak>
                 @include('campaigns.partials.npcs')
             </div>
         </div>

@@ -31,7 +31,7 @@
         {{-- Tab content --}}
         <div class="p-6">
             {{-- Overview tab --}}
-            <div x-show="tab === 'overview'" x-transition>
+            <div x-show="tab === 'overview'">
                 {{-- HEADER --}}
                 <div class="flex flex-col sm:flex-row items-start sm:items-center mb-6">
                     <div class="flex-1">
@@ -84,7 +84,7 @@
             </div>
 
             {{-- NPCs tab --}}
-            <div x-show="tab === 'npcs'" x-transition>
+            <div x-show="tab === 'npcs'">
                 @include('quests.partials.npcs', ['quest' => $quest, 'campaign' => $campaign, 'availableNpcs' => $availableNpcs])
             </div>
         </div>
