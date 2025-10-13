@@ -60,7 +60,8 @@ class NpcController extends Controller
     public function show(Request $request, $npcId)
     {
         $npc = $request->user()->npcs()->findOrFail($npcId);
-        return view('compendium.npcs.show', compact('npc'));
+        $quests = $npc->quests()->with('campaign')->get();
+        return view('compendium.npcs.show', compact('npc', 'quests'));
     }
 
     public function edit(Request $request, $npcId)
