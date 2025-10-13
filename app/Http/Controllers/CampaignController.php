@@ -68,8 +68,17 @@ class CampaignController extends Controller
      */
     public function show(Campaign $campaign)
     {
-        $campaign->load('members');
-        return view('campaigns.show', compact('campaign'));
+        $quests = $campaign->quests()->latest()->get();
+
+        $npcIds = $campaign->quests()
+            ->with('npcs')
+            ->get()
+            ->pluck('npcs')
+            ->flatten()
+            ->unique('id')
+            ->values();
+
+        return view('campaigns.show', compact('campaign', 'quests', 'npcIds'));
     }
 
     /**
