@@ -9,7 +9,7 @@ class ItemRaritiesTableSeeder extends Seeder
 {
     public function run(): void
     {
-        $path = base_path('database/data/ItemRarity.json'); // adjust if filename differs
+        $path = base_path('database/data/ItemRarity.json');
         $json = json_decode(file_get_contents($path), true);
 
         $rarities = collect($json)->map(function ($entry) {
