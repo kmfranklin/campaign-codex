@@ -17,7 +17,9 @@ class ItemsTableSeeder extends Seeder
         ];
 
         $items = collect($files)
-            ->flatMap(fn ($path) => json_decode(file_get_contents($path), true))
+            ->flatMap(fn($path) => json_decode(file_get_contents($path), true))
+            // use pk as the unique key
+            ->keyBy('pk')
             ->map(function ($entry) {
                 $fields = $entry['fields'];
 
@@ -31,7 +33,6 @@ class ItemsTableSeeder extends Seeder
                     'requires_attunement' => $fields['requires_attunement'] ?? false,
                     'attunement_requirements' => $fields['attunement'] ?? null,
 
-                    // Lookups: match slugs from JSON to reference tables
                     'item_category_id' => DB::table('item_categories')
                         ->where('slug', $fields['category'] ?? null)
                         ->value('id'),
@@ -44,6 +45,7 @@ class ItemsTableSeeder extends Seeder
                     'updated_at' => now(),
                 ];
             })
+            ->values() // reset numeric keys
             ->all();
 
         DB::table('items')->insert($items);
