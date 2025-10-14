@@ -17,7 +17,7 @@ class ItemsTableSeeder extends Seeder
             $fields = $entry['fields'];
 
             return [
-                'key' => $entry['pk'],                           // unique key from JSON
+                'item_key' => $entry['pk'],
                 'name' => $fields['name'],
                 'description' => $fields['desc'] ?? null,
                 'cost' => $fields['cost'] ?? null,
