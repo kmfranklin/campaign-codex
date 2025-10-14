@@ -13,6 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // --- Core reference data from Open5e ---
+        $this->call([
+            ItemCategoriesTableSeeder::class,
+            ItemRaritiesTableSeeder::class,
+            DamageTypesTableSeeder::class,
+            ItemsTableSeeder::class,
+            WeaponsTableSeeder::class,
+            ArmorsTableSeeder::class,
+        ]);
+
+        // --- Dev/test accounts ---
         $devUser = User::factory()->create([
             'name' => 'Kevin',
             'email' => 'kevin@example.com',
