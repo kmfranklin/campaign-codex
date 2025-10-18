@@ -26,7 +26,13 @@ class LinkItemVariants extends Command
 
         foreach ($variants as $variant) {
             $baseName = $this->extractBaseName($variant->name);
-            $this->line("{$variant->name} → base: " . ($baseName ?? '??'));
+
+            if ($baseName) {
+                $normalized = $this->normalizeName($baseName);
+                $this->line("{$variant->name} -> base: {$baseName} -> normalized: {$normalized}");
+            } else {
+                $this->line("{$variant->name} -> base: ??");
+            }
         }
 
 
@@ -49,5 +55,14 @@ class LinkItemVariants extends Command
         }
 
         return null;
+    }
+
+    private function normalizeName(string $name): string
+    {
+        return strtolower(
+            preg_replace('/\s+/', ' ',
+                str_replace('-', ' ', trim($name))
+            )
+        );
     }
 }
