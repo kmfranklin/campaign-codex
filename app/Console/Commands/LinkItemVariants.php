@@ -25,9 +25,29 @@ class LinkItemVariants extends Command
         $this->info("Found {$variants->count()} potential armor/weapon variants:");
 
         foreach ($variants as $variant) {
-            $this->line("- {$variant->name}");
+            $baseName = $this->extractBaseName($variant->name);
+            $this->line("{$variant->name} → base: " . ($baseName ?? '??'));
         }
 
+
         return self::SUCCESS;
+    }
+
+    private function extractBaseName(string $name): ?string
+    {
+        // Look for parentheses
+        if (preg_match('/\(([^)]+)\)/', $name, $matches)) {
+            $inside = trim($matches[1]);
+
+            // If inside is a bonus like +1, +2, +3 → base is the part before "("
+            if (preg_match('/^\+\d+$/', $inside)) {
+                return trim(substr($name, 0, strpos($name, '(')));
+            }
+
+            // Otherwise, treat the inside as the base item name
+            return $inside;
+        }
+
+        return null;
     }
 }
