@@ -41,6 +41,9 @@ class ItemsTableSeeder extends Seeder
                         ->where('slug', $fields['rarity'] ?? null)
                         ->value('id'),
 
+                    'armor_key' => $fields['armor'] ?? null,
+                    'weapon_key' => $fields['weapon'] ?? null,
+
                     'is_srd' => true,
                     'user_id' => null,
 
