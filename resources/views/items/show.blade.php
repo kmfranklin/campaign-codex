@@ -53,9 +53,9 @@
 
             {{-- DESCRIPTION --}}
             @if($item->description)
-                <div class="mb-6">
+                <div class="mb-6 prose max-w-none">
                     <h2 class="text-lg font-semibold text-gray-700 mb-2">Description</h2>
-                    <p class="text-gray-800">{{ $item->description }}</p>
+                    {!! Str::markdown($item->description) !!}
                 </div>
             @endif
             {{-- /DESCRIPTION --}}

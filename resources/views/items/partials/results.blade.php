@@ -35,7 +35,7 @@
                                     + Dex (cap {{ $item->armor->dex_mod_cap ?? '∞' }})
                                 @endif
                             @else
-                                {{ $item->description ? Str::limit($item->description, 40) : '—' }}
+                                {{ $item->description ? Str::limit(strip_tags(Str::markdown($item->description)), 40) : '—' }}
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">

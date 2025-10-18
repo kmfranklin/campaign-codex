@@ -9,7 +9,7 @@ class DamageTypesTableSeeder extends Seeder
 {
     public function run(): void
     {
-        $path = base_path('database/data/DamageType.json'); // adjust if needed
+        $path = base_path('database/data/DamageType.json');
         $json = json_decode(file_get_contents($path), true);
 
         $types = collect($json)->map(function ($entry) {
