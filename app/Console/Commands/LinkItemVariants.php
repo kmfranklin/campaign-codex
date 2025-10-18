@@ -27,14 +27,27 @@ class LinkItemVariants extends Command
         foreach ($variants as $variant) {
             $baseName = $this->extractBaseName($variant->name);
 
-            if ($baseName) {
-                $normalized = $this->normalizeName($baseName);
-                $this->line("{$variant->name} -> base: {$baseName} -> normalized: {$normalized}");
+            if (!$baseName) {
+                $this->warn("No base name extracted for: {$variant->name}");
+                continue;
+            }
+
+            $normalized = $this->normalizeName($baseName);
+
+            // Try to find a base item with a normalized name match
+            $baseItem = Item::all()->first(function ($item) use ($normalized) {
+                return $this->normalizeName($item->name) === $normalized;
+            });
+
+            if ($baseItem) {
+                $variant->base_item_id = $baseItem->id;
+                $variant->save();
+
+                $this->info("Linked: {$variant->name} → {$baseItem->name}");
             } else {
-                $this->line("{$variant->name} -> base: ??");
+                $this->warn("No match found for: {$variant->name} (normalized:      {$normalized})");
             }
         }
-
 
         return self::SUCCESS;
     }
