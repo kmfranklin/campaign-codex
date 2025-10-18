@@ -21,23 +21,23 @@
                     <div class="flex items-start">
                         <div>
                             <h1 class="text-3xl font-bold text-gray-900">{{ $item->name }}</h1>
-                            <p class="text-gray-600 mt-1">
-                                {{ $item->category?->name ?? '—' }} · {{ $item->rarity?->name ?? '—' }}
-                            </p>
 
                             {{-- tags --}}
                             <div class="mt-3 flex flex-wrap gap-2">
-                                <span class="bg-purple-50 text-purple-700 text-xs font-medium px-2 py-1 rounded">
-                                    Item
-                                </span>
+                                @if($item->category)
+                                    <span class="bg-purple-50 text-purple-700 text-xs font-medium px-2                          py-1 rounded">
+                                        {{ $item->category->name }}
+                                    </span>
+                                @endif
+                                @if($item->rarity)
+                                    <span class="bg-indigo-50 text-indigo-700 text-xs font-medium px-2                          py-1 rounded">
+                                        {{ $item->rarity->name }}
+                                    </span>
+                                @endif
                                 @if($item->weapon)
-                                    <span class="bg-blue-50 text-blue-700 text-xs font-medium px-2 py-1 rounded">
-                                        Weapon
-                                    </span>
+                                    <span class="bg-blue-50 text-blue-700 text-xs font-medium px-2 py-1                             rounded">Weapon</span>
                                 @elseif($item->armor)
-                                    <span class="bg-green-50 text-green-700 text-xs font-medium px-2 py-1 rounded">
-                                        Armor
-                                    </span>
+                                    <span class="bg-green-50 text-green-700 text-xs font-medium px-2 py-1                           rounded">Armor</span>
                                 @endif
                             </div>
                         </div>
