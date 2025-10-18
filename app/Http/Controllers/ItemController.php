@@ -57,7 +57,7 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
-        $item->load(['weapon.damageType', 'armor', 'category', 'rarity']);
+        $item->load(['weapon.damageType', 'armor', 'category', 'rarity', 'baseItem.weapon.damageType', 'baseItem.armor']);
 
         return view('items.show', compact('item'));
     }
