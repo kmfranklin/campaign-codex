@@ -20,6 +20,17 @@ class Item extends Model
         'attunement_requirements',
         'item_category_id',
         'item_rarity_id',
+        'base_item_id',
+        'is_srd',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'is_magic_item' => 'boolean',
+        'requires_attunement' => 'boolean',
+        'is_srd' => 'boolean',
+        'cost' => 'decimal:2',
+        'weight' => 'decimal:2',
     ];
 
     // Relationships
@@ -41,5 +52,20 @@ class Item extends Model
     public function rarity()
     {
         return $this->belongsTo(ItemRarity::class, 'item_rarity_id');
+    }
+
+    public function baseItem()
+    {
+        return $this->belongsTo(self::class, 'base_item_id');
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(self::class, 'base_item_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
