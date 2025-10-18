@@ -12,8 +12,27 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::with(['weapon.damageType', 'armor', 'category', 'rarity'])->paginate(15);
+        $query = Item::with(['weapon.damageType', 'armor', 'category', 'rarity']);
 
+        // Apply filters
+        if ($search = request('q')) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+        if ($category = request('category')) {
+            $query->whereHas('category', fn($q) => $q->where('slug', $category));
+        }
+        if ($rarity = request('rarity')) {
+            $query->whereHas('rarity', fn($q) => $q->where('slug', $rarity));
+        }
+
+        $items = $query->paginate(15);
+
+        // If AJAX request, return only the partial
+        if (request()->ajax()) {
+            return view('items.partials.results', compact('items'));
+        }
+
+        // Otherwise, return full page
         return view('items.index', compact('items'));
     }
 
