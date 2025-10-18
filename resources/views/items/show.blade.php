@@ -66,11 +66,23 @@
                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm">
                     <div>
                         <dt class="font-medium text-gray-600">Cost</dt>
-                        <dd class="text-gray-800">{{ $item->cost ?? '—' }}</dd>
+                        <dd class="text-gray-800">
+                            @if($item->cost && $item->cost > 0)
+                                {{ rtrim(rtrim(number_format($item->cost, 2, '.', ''), '0'), '.') }} GP
+                            @else
+                                —
+                            @endif
+                        </dd>
                     </div>
                     <div>
                         <dt class="font-medium text-gray-600">Weight</dt>
-                        <dd class="text-gray-800">{{ $item->weight ?? '—' }}</dd>
+                        <dd class="text-gray-800">
+                            @if($item->weight && $item->weight > 0)
+                                {{ rtrim(rtrim(number_format($item->weight, 2, '.', ''), '0'), '.') }} lbs
+                            @else
+                                —
+                            @endif
+                        </dd>
                     </div>
                     <div>
                         <dt class="font-medium text-gray-600">Magic Item</dt>
