@@ -12,7 +12,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::with(['weapon.damageType', 'armor', 'category', 'rarity'])->get();
+        $items = Item::with(['weapon.damageType', 'armor', 'category', 'rarity'])->paginate(15);
 
         return view('items.index', compact('items'));
     }
