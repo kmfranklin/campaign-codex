@@ -6,6 +6,8 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCustomItemRequest;
 use App\Http\Requests\UpdateCustomItemRequest;
+use App\Models\ItemCategory;
+use App\Models\ItemRarity;
 
 class CustomItemController extends Controller
 {
@@ -21,10 +23,12 @@ class CustomItemController extends Controller
         return view('items.custom.index');
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        // TODO: show create form (blank or prefilled for clone)
-        return view('items.custom.create');
+        $prefill = session('prefill', []);
+        $categories = ItemCategory::orderBy('name')->get();
+        $rarities = ItemRarity::orderBy('name')->get();
+        return view('items.custom.create', compact('prefill', 'categories', 'rarities'));
     }
 
     public function store(StoreCustomItemRequest $request)
@@ -68,8 +72,20 @@ class CustomItemController extends Controller
 
     public function clone(Item $srdItem)
     {
-        // TODO: prefill create form with SRD item data
-        return redirect()->route('items.custom.create')
-            ->with('prefill', $srdItem->toArray());
+        abort_unless($srdItem->is_srd, 404);
+
+        $prefill = [
+            'name' => $srdItem->name,
+            'category' => $srdItem->category,
+            'rarity' => $srdItem->rarity,
+            'type' => $srdItem->type,
+            'description' => $srdItem->description,
+            'weapon_key' => $srdItem->weapon_key,
+            'armor_key' => $srdItem->armor_key,
+            'item_key' => $srdItem->item_key,
+            'base_item_id' => $srdItem->id,
+        ];
+
+        return redirect()->route('items.custom.create')->with('prefill', $prefill);
     }
 }
