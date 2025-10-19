@@ -8,7 +8,16 @@ use App\Models\User;
 class ItemPolicy
 {
     /**
-     * Anyone can view SRD items.
+     * Anyone can list SRD items.
+     * Logged-in users can also see their own custom items.
+     */
+    public function viewAny(?User $user): bool
+    {
+        return true;
+    }
+
+    /**
+     * Anyone (even guests) can view SRD items.
      * Only the owner (or admin) can view their own custom items.
      */
     public function view(?User $user, Item $item): bool
@@ -21,11 +30,11 @@ class ItemPolicy
     }
 
     /**
-     * Any authenticated user can create a custom item.
+     * Only authenticated users can create custom items.
      */
     public function create(User $user): bool
     {
-        return true;
+        return true; // if we got here, user is logged in
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateCustomItemRequest;
 use App\Models\DamageType;
 use App\Models\ItemCategory;
 use App\Models\ItemRarity;
+use Illuminate\Support\Str;
 
 class CustomItemController extends Controller
 {
@@ -42,6 +43,7 @@ class CustomItemController extends Controller
         $item = Item::create($data + [
             'is_srd' => false,
             'user_id' => auth()->id(),
+            'item_key' => Str::uuid()->toString(),
         ]);
 
         // Conditionally create related record
@@ -80,7 +82,7 @@ class CustomItemController extends Controller
     {
         $data = $request->validated();
 
-        $item->update($data);
+        $item->update(collect($data)->except('item_key')->all());
 
         if ($data['type'] === 'Weapon') {
             $item->weapon()->updateOrCreate(
