@@ -1,7 +1,7 @@
 {{-- Desktop Table --}}
-<div class="hidden sm:block overflow-x-auto">
-    <div class="min-w-full bg-white border border-gray-200 shadow-sm sm:rounded-lg">
-        <table class="min-w-full">
+<div class="hidden sm:block">
+    <div class="overflow-x-auto bg-white border border-gray-200 shadow-sm sm:rounded-lg">
+        <table class="min-w-full table-auto">
             <thead class="bg-gray-100">
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
@@ -15,18 +15,23 @@
             <tbody>
                 @forelse($items as $item)
                     <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-normal break-words max-w-xs">
                             {{ $item->name }}
+                            @if($item->baseItem)
+                                <div class="text-xs text-gray-500">
+                                    Variant of <a href="{{ route('items.show', $item->baseItem) }}" class="underline">{{ $item->baseItem->name }}</a>
+                                </div>
+                            @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $item->category?->name ?? '—' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $item->rarity?->name ?? '—' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">{{ $item->category?->name ?? '—' }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">{{ $item->rarity?->name ?? '—' }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
                             @if($item->weapon) Weapon
                             @elseif($item->armor) Armor
                             @else Gear
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-normal break-words max-w-md">
                             @if($item->weapon)
                                 {{ $item->weapon->damage_dice }} {{ $item->weapon->damageType?->name }}
                             @elseif($item->armor)
@@ -35,10 +40,10 @@
                                     + Dex (cap {{ $item->armor->dex_mod_cap ?? '∞' }})
                                 @endif
                             @else
-                                {{ $item->description ? Str::limit(strip_tags(Str::markdown($item->description)), 40) : '—' }}
+                                {{ $item->description ? Str::limit(strip_tags(Str::markdown($item->description)), 80) : '—' }}
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <td class="px-6 py-4 text-sm whitespace-nowrap">
                             <a href="{{ route('items.show', $item) }}"
                                class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
                                 View
@@ -47,7 +52,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-700">
+                        <td colspan="6" class="px-6 py-4 text-sm text-center text-gray-700">
                             No items found.
                         </td>
                     </tr>
@@ -67,6 +72,11 @@
                     <p class="text-sm text-gray-700">
                         {{ $item->category?->name ?? '—' }} &middot; {{ $item->rarity?->name ?? '—' }}
                     </p>
+                    @if($item->baseItem)
+                        <p class="text-xs text-gray-500">
+                            Variant of <a href="{{ route('items.show', $item->baseItem) }}" class="underline">{{ $item->baseItem->name }}</a>
+                        </p>
+                    @endif
                 </div>
                 <a href="{{ route('items.show', $item) }}"
                    class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
