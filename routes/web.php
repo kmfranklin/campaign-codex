@@ -38,9 +38,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('items/custom', CustomItemController::class)
         ->names('items.custom')
         ->parameters(['custom' => 'item']);
-
-    Route::get('items/{srdItem}/clone', [CustomItemController::class, 'clone'])
-        ->name('items.clone');
 });
 
 // NPC-Quest relationship routes

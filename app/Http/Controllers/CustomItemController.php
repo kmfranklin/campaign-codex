@@ -27,9 +27,54 @@ class CustomItemController extends Controller
 
     public function create(Request $request)
     {
-        $prefill = session('prefill', []);
+        $prefill = [];
+        $baseId = $request->query('base_item_id');
+
+        if ($baseId) {
+            $source = Item::findOrFail($baseId);
+
+            // Authorization:
+            // - Any signed-in user can clone SRD items
+            // - Only the owner can clone their custom items
+            if (!$source->is_srd && $source->user_id !== auth()->id()) {
+                abort(403);
+            }
+
+            $prefill = [
+                'name'         => $source->name,
+                'category'     => $source->item_category_id,
+                'rarity'       => $source->item_rarity_id,
+                'type'         => $source->type,
+                'description'  => $source->description,
+                'base_item_id' => $source->id,
+            ];
+
+            // Optional: prefill subtype details if present
+            if ($source->weapon) {
+                $prefill += [
+                    'damage_dice'     => $source->weapon->damage_dice,
+                    'damage_type_id'  => $source->weapon->damage_type_id,
+                    'range'           => $source->weapon->range,
+                    'long_range'      => $source->weapon->long_range,
+                    'distance_unit'   => $source->weapon->distance_unit,
+                    'is_improvised'   => (bool) $source->weapon->is_improvised,
+                    'is_simple'       => (bool) $source->weapon->is_simple,
+                ];
+            }
+
+            if ($source->armor) {
+                $prefill += [
+                    'base_ac'                      => $source->armor->base_ac,
+                    'adds_dex_mod'                 => (bool)    $source->armor->adds_dex_mod,
+                    'dex_mod_cap'                  => $source->armor->dex_mod_cap,
+                    'imposes_stealth_disadvantage' => (bool)    $source->armor->imposes_stealth_disadvantage,
+                    'strength_requirement'         =>   $source->armor->strength_requirement,
+                ];
+            }
+        }
+
         $categories = ItemCategory::orderBy('name')->get();
-        $rarities = ItemRarity::orderBy('name')->get();
+        $rarities   = ItemRarity::orderBy('name')->get();
         $damageTypes = DamageType::orderBy('name')->get();
 
         return view('items.custom.create', compact('prefill', 'categories', 'rarities', 'damageTypes'));
@@ -68,8 +113,7 @@ class CustomItemController extends Controller
 
     public function show(Item $item)
     {
-        // TODO: show custom item detail page
-        return view('items.custom.show', compact('item'));
+        return view('items.show', compact('item'));
     }
 
     public function edit(Item $item)
@@ -112,24 +156,5 @@ class CustomItemController extends Controller
     {
         // TODO: soft delete custom item
         return redirect()->route('items.custom.index');
-    }
-
-    public function clone(Item $srdItem)
-    {
-        abort_unless($srdItem->is_srd, 404);
-
-        $prefill = [
-            'name' => $srdItem->name,
-            'category' => $srdItem->item_category_id,
-            'rarity' => $srdItem->item_rarity_id,
-            'type' => $srdItem->type,
-            'description' => $srdItem->description,
-            'weapon_key' => $srdItem->weapon_key,
-            'armor_key' => $srdItem->armor_key,
-            'item_key' => $srdItem->item_key,
-            'base_item_id' => $srdItem->id,
-        ];
-
-        return redirect()->route('items.custom.create')->with('prefill', $prefill);
     }
 }

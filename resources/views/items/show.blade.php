@@ -3,14 +3,14 @@
 @section('content')
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
     {{-- Back link --}}
-    <a href="{{ route('items.index') }}"
+    <a href="{{ $item->is_srd ? route('items.index') : route('items.custom.index') }}"
        class="inline-flex items-center text-sm text-purple-800 hover:text-purple-900 mb-4 font-medium">
       <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
            viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M15 19l-7-7 7-7"/>
       </svg>
-      Back to Items
+      Back to {{ $item->is_srd ? 'Items' : 'Custom Items' }}
     </a>
 
     <div class="bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
@@ -29,27 +29,64 @@
                         $isArmor  = $item->armor || $item->baseItem?->armor;
                         if ($isWeapon) $tags->push(['label' => 'Weapon', 'color' => 'blue']);
                         if ($isArmor) $tags->push(['label' => 'Armor', 'color' => 'green']);
+                        if (!$item->is_srd) $tags->push(['label' => 'Custom', 'color' => 'pink']);
+                        $tags = $tags->unique('label');
+                        if ($item->baseItem) {
+                            $tags->push([
+                                'label' => 'Variant of ' . $item->baseItem->name,
+                                'color' => 'purple',
+                                'url' => route('items.show', $item->baseItem)
+                            ]);
+                        }
                         $tags = $tags->unique('label');
                     @endphp
 
                     <div class="mt-3 flex flex-wrap gap-2">
                         @foreach($tags as $tag)
-                            <span class="bg-{{ $tag['color'] }}-50 text-{{ $tag['color'] }}-700 text-xs font-medium px-2 py-1 rounded">
-                                {{ $tag['label'] }}
-                            </span>
+                            @if(isset($tag['url']))
+                                <a href="{{ $tag['url'] }}"
+                                   class="bg-{{ $tag['color'] }}-50 text-{{ $tag['color'] }}-700 text-xs font-medium px-2 py-1 rounded hover:underline">
+                                    {{ $tag['label'] }}
+                                </a>
+                            @else
+                                <span class="bg-{{ $tag['color'] }}-50 text-{{ $tag['color'] }}-700 text-xs font-medium px-2 py-1 rounded">
+                                    {{ $tag['label'] }}
+                                </span>
+                            @endif
                         @endforeach
                     </div>
                 </div>
 
-                {{-- VARIANT BADGE (top-right corner) --}}
-                @if($item->baseItem)
-                    <div class="absolute top-0 right-0 mt-2 mr-2">
-                        <a href="{{ route('items.show', $item->baseItem) }}"
-                           class="inline-flex items-center text-xs px-2 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200">
-                            Variant of {{ $item->baseItem->name }}
+            {{-- OWNER ACTIONS --}}
+            @can('update', $item)
+                <div class="ml-auto flex gap-2">
+                    <a href="{{ route('items.custom.edit', $item) }}"
+                       class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
+                        Edit
+                    </a>
+                    @can('delete', $item)
+                        <form action="{{ route('items.custom.destroy', $item) }}"
+                              method="POST"
+                              onsubmit="return confirm('Delete this item?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
+                                Delete
+                            </button>
+                        </form>
+                    @endcan
+                @endcan
+
+                {{-- CLONE BUTTON --}}
+                @auth
+                    @if($item->is_srd || $item->user_id === auth()->id())
+                        <a href="{{ route('items.custom.create',['base_item_id' => $item->id]) }}"
+                           class="px-4 py-2 bg-purple-800 hover:bg-purple-900 text-white rounded">
+                            Clone
                         </a>
-                    </div>
-                @endif
+                    @endif
+                @endauth
             </div>
             {{-- /HEADER --}}
 
