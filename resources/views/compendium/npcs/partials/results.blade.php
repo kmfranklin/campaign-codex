@@ -1,7 +1,7 @@
 {{-- Desktop Table --}}
-<div class="hidden sm:block overflow-x-auto">
-    <div class="min-w-full bg-white border border-gray-200 shadow-sm sm:rounded-lg">
-        <table class="min-w-full">
+<div class="hidden sm:block">
+    <div class="overflow-x-auto bg-white border border-gray-200 shadow-sm sm:rounded-lg">
+        <table class="min-w-full table-auto">
             <thead class="bg-gray-100">
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
@@ -15,12 +15,22 @@
             <tbody>
                 @forelse($npcs as $npc)
                     <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $npc->name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $npc->race ?? '—' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $npc['class'] ?? '—' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $npc['alignment'] ?? '—' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $npc['role'] ?? '—' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-normal break-words max-w-xs">
+                            {{ $npc->name }}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-normal break-words max-w-xs">
+                            {{ $npc->race ?? '—' }}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-normal break-words max-w-xs">
+                            {{ $npc['class'] ?? '—' }}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
+                            {{ $npc['alignment'] ?? '—' }}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-normal break-words max-w-sm">
+                            {{ $npc['role'] ?? '—' }}
+                        </td>
+                        <td class="px-6 py-4 text-sm whitespace-nowrap">
                             <a href="{{ route('compendium.npcs.show', $npc) }}"
                                class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
                                 View
@@ -42,8 +52,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6"
-                            class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-700">
+                        <td colspan="6" class="px-6 py-4 text-sm text-center text-gray-700">
                             No NPCs found.
                         </td>
                     </tr>
@@ -57,12 +66,15 @@
 <div class="sm:hidden space-y-4">
     @forelse($npcs as $npc)
         <div class="bg-white border border-gray-200 shadow p-4 rounded-lg">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-start">
                 <div>
-                    <h2 class="text-lg font-medium text-gray-900">{{ $npc->name }}</h2>
+                    <h2 class="text-lg font-medium text-gray-900 break-words">{{ $npc->name }}</h2>
                     <p class="text-sm text-gray-700">
                         {{ $npc['class'] ?? '—' }} &middot; {{ $npc->race ?? '—' }}
                     </p>
+                    @if($npc['role'])
+                        <p class="text-xs text-gray-500 break-words">{{ $npc['role'] }}</p>
+                    @endif
                 </div>
                 <a href="{{ route('compendium.npcs.show', $npc) }}"
                    class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
@@ -81,4 +93,3 @@
         {{ $npcs->links() }}
     </div>
 @endif
-
