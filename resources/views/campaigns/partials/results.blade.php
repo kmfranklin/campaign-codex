@@ -1,7 +1,7 @@
 {{-- Desktop Table --}}
-<div class="hidden sm:block overflow-x-auto">
-    <div class="min-w-full bg-white border border-gray-200 shadow-sm sm:rounded-lg">
-        <table class="min-w-full">
+<div class="hidden sm:block">
+    <div class="overflow-x-auto bg-white border border-gray-200 shadow-sm sm:rounded-lg">
+        <table class="min-w-full table-auto">
             <thead class="bg-gray-100">
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
@@ -12,23 +12,23 @@
             <tbody>
                 @forelse($campaigns as $campaign)
                     <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-normal break-words max-w-xs">
                             {{ $campaign->name }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                            {{ Str::limit($campaign->description, 80) ?? '—' }}
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-normal break-words max-w-md">
+                            {{ $campaign->description ? Str::limit($campaign->description, 120) : '—' }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <td class="px-6 py-4 text-sm whitespace-nowrap">
                             {{-- View is always visible --}}
                             <a href="{{ route('campaigns.show', $campaign) }}"
-                               class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300                       font-medium">
+                               class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
                                 View
                             </a>
 
                             {{-- Only show Edit if authorized --}}
                             @can('update', $campaign)
                                 <a href="{{ route('campaigns.edit', $campaign) }}"
-                                   class="ml-4 text-yellow-600 hover:text-yellow-900 focus:outline-none focus:ring-2                        focus:ring-yellow-300 font-medium">
+                                   class="ml-4 text-yellow-600 hover:text-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-300 font-medium">
                                     Edit
                                 </a>
                             @endcan
@@ -40,7 +40,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                            class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-300                       font-medium">
+                                            class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-300 font-medium">
                                         Delete
                                     </button>
                                 </form>
@@ -49,8 +49,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="3"
-                            class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-700">
+                        <td colspan="3" class="px-6 py-4 text-sm text-center text-gray-700">
                             No campaigns found.
                         </td>
                     </tr>
@@ -64,12 +63,12 @@
 <div class="sm:hidden space-y-4">
     @forelse($campaigns as $campaign)
         <div class="bg-white border border-gray-200 shadow p-4 rounded-lg">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-start">
                 <div>
-                    <h2 class="text-lg font-medium text-gray-900">{{ $campaign->name }}</h2>
+                    <h2 class="text-lg font-medium text-gray-900 break-words">{{ $campaign->name }}</h2>
                     @if($campaign->description)
-                        <p class="text-sm text-gray-700">
-                            {{ Str::limit($campaign->description, 80) }}
+                        <p class="text-sm text-gray-700 break-words">
+                            {{ Str::limit($campaign->description, 120) }}
                         </p>
                     @endif
                 </div>
