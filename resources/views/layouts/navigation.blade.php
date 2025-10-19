@@ -23,6 +23,10 @@
                                 :active="request()->routeIs('campaigns.*')">
                         {{ __('Campaigns') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('items.index') }}"
+                                :active="request()->routeIs('items.*')">
+                        {{ __('Item Index') }}
+                    </x-nav-link>
                 </div>
             </div>
 
