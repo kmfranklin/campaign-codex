@@ -35,6 +35,22 @@ class UpdateCustomItemRequest extends FormRequest
             'weapon_key'       => ['nullable', 'string', 'max:100'],
             'armor_key'        => ['nullable', 'string', 'max:100'],
             'item_key'         => ['nullable', 'string', 'max:100'],
+
+            // Weapon
+            'damage_dice'      => ['nullable', 'string'],
+            'damage_type_id'   => ['nullable', Rule::exists('damage_types', 'id')],
+            'range'            => ['nullable', 'numeric'],
+            'long_range'       => ['nullable', 'numeric'],
+            'distance_unit'    => ['nullable', 'string'],
+            'is_improvised'    => ['boolean'],
+            'is_simple'        => ['boolean'],
+
+            // Armor
+            'base_ac'                  => ['nullable', 'integer'],
+            'adds_dex_mod'             => ['boolean'],
+            'dex_mod_cap'              => ['nullable', 'integer'],
+            'imposes_stealth_disadvantage' => ['boolean'],
+            'strength_requirement'     => ['nullable', 'integer'],
         ];
     }
 }

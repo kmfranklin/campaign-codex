@@ -6,6 +6,7 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCustomItemRequest;
 use App\Http\Requests\UpdateCustomItemRequest;
+use App\Models\DamageType;
 use App\Models\ItemCategory;
 use App\Models\ItemRarity;
 
@@ -28,19 +29,38 @@ class CustomItemController extends Controller
         $prefill = session('prefill', []);
         $categories = ItemCategory::orderBy('name')->get();
         $rarities = ItemRarity::orderBy('name')->get();
-        return view('items.custom.create', compact('prefill', 'categories', 'rarities'));
+        $damageTypes = DamageType::orderBy('name')->get();
+
+        return view('items.custom.create', compact('prefill', 'categories', 'rarities', 'damageTypes'));
     }
 
     public function store(StoreCustomItemRequest $request)
     {
         $data = $request->validated();
 
-        $item = Item::create(array_merge($data, [
+        // Create the base Item
+        $item = Item::create($data + [
             'is_srd' => false,
             'user_id' => auth()->id(),
-        ]));
+        ]);
 
-        return redirect()->route('items.custom.show', $item)
+        // Conditionally create related record
+        if ($data['type'] === 'Weapon') {
+            $item->weapon()->create($request->only([
+                'damage_dice', 'damage_type_id', 'range', 'long_range',
+                'distance_unit', 'is_improvised', 'is_simple'
+            ]));
+        }
+
+        if ($data['type'] === 'Armor') {
+            $item->armor()->create($request->only([
+                'base_ac', 'adds_dex_mod', 'dex_mod_cap',
+                'imposes_stealth_disadvantage', 'strength_requirement'
+            ]));
+        }
+
+        return redirect()
+            ->route('items.custom.show', $item)
             ->with('status', 'Custom item created.');
     }
 
@@ -58,7 +78,29 @@ class CustomItemController extends Controller
 
     public function update(UpdateCustomItemRequest $request, Item $item)
     {
-        $item->update($request->validated());
+        $data = $request->validated();
+
+        $item->update($data);
+
+        if ($data['type'] === 'Weapon') {
+            $item->weapon()->updateOrCreate(
+                ['item_id' => $item->id],
+                $request->only([
+                    'damage_dice', 'damage_type_id', 'range', 'long_range',
+                    'distance_unit', 'is_improvised', 'is_simple'
+                ])
+            );
+        }
+
+        if ($data['type'] === 'Armor') {
+            $item->armor()->updateOrCreate(
+                ['item_id' => $item->id],
+                $request->only([
+                    'base_ac', 'adds_dex_mod', 'dex_mod_cap',
+                    'imposes_stealth_disadvantage', 'strength_requirement'
+                ])
+            );
+        }
 
         return redirect()->route('items.custom.show', $item)
             ->with('status', 'Custom item updated.');
@@ -76,8 +118,8 @@ class CustomItemController extends Controller
 
         $prefill = [
             'name' => $srdItem->name,
-            'category' => $srdItem->category,
-            'rarity' => $srdItem->rarity,
+            'category' => $srdItem->item_category_id,
+            'rarity' => $srdItem->item_rarity_id,
             'type' => $srdItem->type,
             'description' => $srdItem->description,
             'weapon_key' => $srdItem->weapon_key,
