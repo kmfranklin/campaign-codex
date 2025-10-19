@@ -6,6 +6,7 @@ use App\Http\Controllers\NpcController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\CustomItemController;
 use App\Models\Npc;
 
 
@@ -30,6 +31,16 @@ Route::middleware('auth')->group(function () {
 Route::resource('campaigns', CampaignController::class);
 Route::resource('campaigns.quests', QuestController::class);
 Route::resource('items', ItemController::class)->only(['index', 'show']);
+
+
+// Custom item routes
+Route::middleware('auth')->group(function () {
+    Route::resource('items/custom', CustomItemController::class)
+        ->names('items.custom');
+
+    Route::get('items/{srdItem}/clone', [CustomItemController::class, 'clone'])
+        ->name('items.clone');
+});
 
 // NPC-Quest relationship routes
 Route::post('campaigns/{campaign}/quests/{quest}/npcs', [QuestController::class, 'attachNpc'])
