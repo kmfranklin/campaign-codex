@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCustomItemRequest;
+use App\Http\Requests\UpdateCustomItemRequest;
 
 class CustomItemController extends Controller
 {
@@ -25,10 +27,17 @@ class CustomItemController extends Controller
         return view('items.custom.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreCustomItemRequest $request)
     {
-        // TODO: validate and persist new custom item
-        return redirect()->route('items.custom.index');
+        $data = $request->validated();
+
+        $item = Item::create(array_merge($data, [
+            'is_srd' => false,
+            'user_id' => auth()->id(),
+        ]));
+
+        return redirect()->route('items.custom.show', $item)
+            ->with('status', 'Custom item created.');
     }
 
     public function show(Item $item)
@@ -43,10 +52,12 @@ class CustomItemController extends Controller
         return view('items.custom.edit', compact('item'));
     }
 
-    public function update(Request $request, Item $item)
+    public function update(UpdateCustomItemRequest $request, Item $item)
     {
-        // TODO: validate and update custom item
-        return redirect()->route('items.custom.show', $item);
+        $item->update($request->validated());
+
+        return redirect()->route('items.custom.show', $item)
+            ->with('status', 'Custom item updated.');
     }
 
     public function destroy(Item $item)
