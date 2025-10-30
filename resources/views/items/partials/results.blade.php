@@ -7,7 +7,6 @@
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Category</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Rarity</th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Type</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Details</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
                 </tr>
@@ -25,12 +24,6 @@
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">{{ $item->category?->name ?? '—' }}</td>
                         <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">{{ $item->rarity?->name ?? '—' }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
-                            @if($item->weapon) Weapon
-                            @elseif($item->armor) Armor
-                            @else Gear
-                            @endif
-                        </td>
                         <td class="px-6 py-4 text-sm text-gray-700 whitespace-normal break-words max-w-md">
                             @if($item->weapon)
                                 {{ $item->weapon->damage_dice }} {{ $item->weapon->damageType?->name }}
@@ -40,7 +33,7 @@
                                     + Dex (cap {{ $item->armor->dex_mod_cap ?? '∞' }})
                                 @endif
                             @else
-                                {{ $item->description ? Str::limit(strip_tags(Str::markdown($item->description)), 80) : '—' }}
+                                {{ $item->description ? Str::limit(strip_tags(Str::markdown($item->description)), 120) : '—' }}
                             @endif
                         </td>
                         <td class="px-6 py-4 text-sm whitespace-nowrap">
