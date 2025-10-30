@@ -1,25 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const typeSelect = document.getElementById('type');
+    const categorySelect = document.getElementById('item_category_id');
     const weaponFields = document.getElementById('weapon-fields');
     const armorFields = document.getElementById('armor-fields');
     const requiresAttunement = document.getElementById('requires_attunement');
-    const attuenmentWrapper = document.getElementById('attunement-requirements-wrapper');
+    const attunementWrapper = document.getElementById('attunement-requirements-wrapper');
+
+    // Replace with your actual category IDs from the DB
+    const WEAPON_CATEGORY_ID = '21';
+    const ARMOR_CATEGORY_ID = '3';
 
     function toggleFields() {
-        const value = typeSelect.value;
-        weaponFields.classList.toggle('hidden', value !== 'Weapon');
-        armorFields.classList.toggle('hidden', value !== 'Armor');
+        const value = categorySelect.value;
+        weaponFields.classList.toggle('hidden', value !== WEAPON_CATEGORY_ID);
+        armorFields.classList.toggle('hidden', value !== ARMOR_CATEGORY_ID);
     }
 
-    if (typeSelect) {
-        typeSelect.addEventListener('change', toggleFields);
-        toggleFields();
+    if (categorySelect) {
+        categorySelect.addEventListener('change', toggleFields);
+        toggleFields(); // run once on load
     }
 
     function toggleAttunement() {
-        attuenmentWrapper.classList.toggle('hidden', !requiresAttunement.checked);
+        attunementWrapper.classList.toggle('hidden', !requiresAttunement.checked);
     }
 
-    requiresAttunement.addEventListener('change', toggleAttunement);
-    toggleAttunement();
+    if (requiresAttunement) {
+        requiresAttunement.addEventListener('change', toggleAttunement);
+        toggleAttunement();
+    }
 });

@@ -31,7 +31,7 @@ class CustomItemController extends Controller
         $baseId = $request->query('base_item_id');
 
         if ($baseId) {
-            $source = Item::findOrFail($baseId);
+            $source = Item::with(['weapon', 'armor'])->findOrFail($baseId);
 
             // Authorization:
             // - Any signed-in user can clone SRD items
@@ -41,34 +41,35 @@ class CustomItemController extends Controller
             }
 
             $prefill = [
-                'name'         => $source->name,
-                'category'     => $source->item_category_id,
-                'rarity'       => $source->item_rarity_id,
-                'type'         => $source->type,
-                'description'  => $source->description,
-                'base_item_id' => $source->id,
+                'name'                 => $source->name,
+                'item_category_id'     => $source->item_category_id,
+                'item_rarity_id'       => $source->item_rarity_id,
+                'description'          => $source->description,
+                'base_item_id'         => $source->id,
             ];
 
-            // Optional: prefill subtype details if present
-            if ($source->weapon) {
+            $weaponSource = $source->weapon ?? $source->baseItem?->weapon;
+            $armorSource  = $source->armor ?? $source->baseItem?->armor;
+
+            if ($weaponSource) {
                 $prefill += [
-                    'damage_dice'     => $source->weapon->damage_dice,
-                    'damage_type_id'  => $source->weapon->damage_type_id,
-                    'range'           => $source->weapon->range,
-                    'long_range'      => $source->weapon->long_range,
-                    'distance_unit'   => $source->weapon->distance_unit,
-                    'is_improvised'   => (bool) $source->weapon->is_improvised,
-                    'is_simple'       => (bool) $source->weapon->is_simple,
+                    'damage_dice'     => $weaponSource->damage_dice,
+                    'damage_type_id'  => $weaponSource->damage_type_id,
+                    'range'           => $weaponSource->range,
+                    'long_range'      => $weaponSource->long_range,
+                    'distance_unit'   => $weaponSource->distance_unit,
+                    'is_improvised'   => (bool) $weaponSource->is_improvised,
+                    'is_simple'       => (bool) $weaponSource->is_simple,
                 ];
             }
 
-            if ($source->armor) {
+            if ($armorSource) {
                 $prefill += [
-                    'base_ac'                      => $source->armor->base_ac,
-                    'adds_dex_mod'                 => (bool)    $source->armor->adds_dex_mod,
-                    'dex_mod_cap'                  => $source->armor->dex_mod_cap,
-                    'imposes_stealth_disadvantage' => (bool)    $source->armor->imposes_stealth_disadvantage,
-                    'strength_requirement'         =>   $source->armor->strength_requirement,
+                    'base_ac'                      => $armorSource->base_ac,
+                    'adds_dex_mod'                 => (bool) $armorSource->adds_dex_mod,
+                    'dex_mod_cap'                  => $armorSource->dex_mod_cap,
+                    'imposes_stealth_disadvantage' => (bool)            $armorSource->imposes_stealth_disadvantage,
+                    'strength_requirement'         => $armorSource->strength_requirement,
                 ];
             }
         }
