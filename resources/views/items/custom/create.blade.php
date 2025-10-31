@@ -1,18 +1,29 @@
 {{-- resources/views/items/custom/create.blade.php --}}
 @extends('layouts.app')
 
+@php
+    $origin = request('from');
+
+    $backRoute = match($origin) {
+        'custom' => route('customItems.index'),
+        'srd' => route('srdItems.index'),
+        default => route('items.index'),
+    };
+@endphp
+
 @section('content')
 <div class="max-w-5xl mx-auto bg-white shadow rounded-lg p-6">
     {{-- Back link --}}
-    <a href="{{ route('items.index') }}"
+    <a href="{{ $backRoute }}"
        class="inline-flex items-center text-sm text-purple-800 hover:text-purple-900 mb-4 font-medium">
-      <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
-           viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15 19l-7-7 7-7"/>
-      </svg>
-      Back to Items
+        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Items
     </a>
+
 
     <h1 class="text-2xl font-bold mb-6">Create Custom Item</h1>
 
@@ -247,9 +258,11 @@
         @endif
 
         <div class="pt-4 border-t flex justify-between">
-            <a href="{{ route('items.index') }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
-                Cancel
-            </a>
+    {{-- Cancel button --}}
+    <a href="{{ $backRoute }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+        Cancel
+    </a>
+
             <button type="submit"
                     class="px-6 py-2 bg-purple-800 text-white font-semibold rounded hover:bg-purple-900
                            focus:outline-none focus:ring-2 focus:ring-purple-500">

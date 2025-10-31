@@ -101,6 +101,20 @@
                     :active="request()->routeIs('compendium.npcs.*')">
                     {{ __('Character Compendium') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('campaigns.index')" :active="request()->routeIs('campaigns.*')">
+                    {{ __('Campaigns') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('items.index')" :active="request()->routeIs('items.index')">
+                    {{ __('All Items') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('srdItems.index')" :active="request()->routeIs('srdItems.index')">
+                    {{ __('SRD Items') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('customItems.index')" :active="request()->routeIs('customItems.index')">
+                    {{ __('Custom Items') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
