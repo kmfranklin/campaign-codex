@@ -8,81 +8,96 @@ use App\Models\Item;
 class ItemController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all items.
      */
-    public function index()
+    public function index(Request $request)
     {
         $query = Item::with(['weapon.damageType', 'armor', 'category', 'rarity']);
+        $items = $this->applyFilters($request, $query)->paginate(15);
 
-        // Apply filters
-        if ($search = request('q')) {
-            $query->where('name', 'like', "%{$search}%");
-        }
-        if ($category = request('category')) {
-            $query->whereHas('category', fn($q) => $q->where('slug', $category));
-        }
-        if ($rarity = request('rarity')) {
-            $query->whereHas('rarity', fn($q) => $q->where('slug', $rarity));
-        }
-
-        $items = $query->paginate(15);
-
-        // If AJAX request, return only the partial
-        if (request()->ajax()) {
-            return view('items.partials.results', compact('items'));
-        }
-
-        // Otherwise, return full page
-        return view('items.index', compact('items'));
+        return $this->renderItems($request, $items, 'items.index');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display SRD items only.
      */
-    public function create()
+    public function srdIndex(Request $request)
     {
-        //
+        $query = Item::where('is_srd', true)
+            ->with(['category', 'rarity', 'weapon.damageType', 'armor']);
+
+        $items = $this->applyFilters($request, $query)->paginate(15);
+
+        return $this->renderItems($request, $items, 'items.srd');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display custom items for the authenticated user.
      */
-    public function store(Request $request)
+    public function customIndex(Request $request)
     {
-        //
+        $query = Item::where('is_srd', false)
+            ->where('user_id', auth()->id())
+            ->with(['category', 'rarity', 'weapon.damageType', 'armor']);
+
+        $items = $this->applyFilters($request, $query)->paginate(15);
+
+        return $this->renderItems($request, $items, 'items.custom');
     }
 
     /**
-     * Display the specified resource.
+     * Display a single item.
      */
     public function show(Item $item)
     {
-        $item->load(['weapon.damageType', 'armor', 'category', 'rarity', 'baseItem.weapon.damageType', 'baseItem.armor']);
+        $item->load([
+            'weapon.damageType',
+            'armor',
+            'category',
+            'rarity',
+            'baseItem.weapon.damageType',
+            'baseItem.armor'
+        ]);
 
         return view('items.show', compact('item'));
     }
 
+    // Placeholder methods for future CRUD
+    public function create() {}
+    public function store(Request $request) {}
+    public function edit(string $id) {}
+    public function update(Request $request, string $id) {}
+    public function destroy(string $id) {}
+
     /**
-     * Show the form for editing the specified resource.
+     * Apply search and filter parameters to the query.
      */
-    public function edit(string $id)
+    private function applyFilters(Request $request, $query)
     {
-        //
+        if ($search = $request->q) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        if ($category = $request->category) {
+            $query->whereHas('category', fn($q) => $q->where('slug', $category));
+        }
+
+        if ($rarity = $request->rarity) {
+            $query->whereHas('rarity', fn($q) => $q->where('slug', $rarity));
+        }
+
+        return $query;
     }
 
     /**
-     * Update the specified resource in storage.
+     * Render either the full view or just the results partial for AJAX.
      */
-    public function update(Request $request, string $id)
+    private function renderItems(Request $request, $items, $view)
     {
-        //
-    }
+        if ($request->ajax()) {
+            return view('items.partials.results', compact('items'));
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view($view, compact('items'));
     }
 }
