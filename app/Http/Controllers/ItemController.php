@@ -13,7 +13,9 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         $query = Item::with(['weapon.damageType', 'armor', 'category', 'rarity']);
-        $items = $this->applyFilters($request, $query)->paginate(15);
+        $items = $this->applyFilters($request, $query)
+            ->paginate(15)
+            ->appends($request->except('page'));
 
         return $this->renderItems($request, $items, 'items.index');
     }
@@ -26,7 +28,9 @@ class ItemController extends Controller
         $query = Item::where('is_srd', true)
             ->with(['category', 'rarity', 'weapon.damageType', 'armor']);
 
-        $items = $this->applyFilters($request, $query)->paginate(15);
+        $items = $this->applyFilters($request, $query)
+            ->paginate(15)
+            ->appends($request->except('page'));
 
         return $this->renderItems($request, $items, 'items.srd');
     }
@@ -40,7 +44,9 @@ class ItemController extends Controller
             ->where('user_id', auth()->id())
             ->with(['category', 'rarity', 'weapon.damageType', 'armor']);
 
-        $items = $this->applyFilters($request, $query)->paginate(15);
+        $items = $this->applyFilters($request, $query)
+            ->paginate(15)
+            ->appends($request->except('page'));
 
         return $this->renderItems($request, $items, 'items.custom');
     }
@@ -95,7 +101,7 @@ class ItemController extends Controller
     private function renderItems(Request $request, $items, $view)
     {
         if ($request->ajax()) {
-            return view('items.partials.results', compact('items'));
+            return view('items.partials.results', compact('items'))->render();
         }
 
         return view($view, compact('items'));
