@@ -6,8 +6,7 @@ use App\Http\Controllers\{
     NpcController,
     CampaignController,
     QuestController,
-    ItemController,
-    CustomItemController
+    ItemController
 };
 
 // Public routes
@@ -27,22 +26,26 @@ Route::middleware('auth')->group(function () {
     // NPC Compendium
     Route::resource('compendium/npcs', NpcController::class)->names('compendium.npcs');
 
-    // Custom Items (full CRUD)
-    Route::resource('items/custom', CustomItemController::class)
-        ->names('items.custom')
-        ->parameters(['custom' => 'item']);
+    // Custom Items (individual CRUD routes handled by ItemController)
+    Route::get('/custom-items', [ItemController::class, 'customIndex'])->name('customItems.index');
+    Route::get('/custom-items/create', [ItemController::class, 'create'])->name('items.custom.create');
+    Route::post('/custom-items', [ItemController::class, 'store'])->name('items.store');
+    Route::get('/custom-items/{item}/edit', [ItemController::class, 'edit'])->name('items.edit');
+    Route::patch('/custom-items/{item}', [ItemController::class, 'update'])->name('items.update');
+    Route::delete('/custom-items/{item}', [ItemController::class, 'destroy'])->name('items.destroy');
+    Route::get('/custom-items/{item}', [ItemController::class, 'show'])->name('items.custom.show');
 });
 
 // Campaigns and Quests
 Route::resource('campaigns', CampaignController::class);
 Route::resource('campaigns.quests', QuestController::class);
 
-// Item Index (read-only)
-Route::resource('items', ItemController::class)->only(['index', 'show']);
+// Item Index (read-only public list + show)
+Route::get('/items', [ItemController::class, 'index'])->name('items.index');
+Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
 
-// SRD and Custom Item Index Views (filtered)
+// SRD and Custom Item Index Views (filtered) — public SRD view, authenticated custom view handled above
 Route::get('/srd-items', [ItemController::class, 'srdIndex'])->name('srdItems.index');
-Route::get('/custom-items', [ItemController::class, 'customIndex'])->name('customItems.index');
 
 // NPC–Quest relationships
 Route::post('campaigns/{campaign}/quests/{quest}/npcs', [QuestController::class, 'attachNpc'])

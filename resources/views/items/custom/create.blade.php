@@ -37,7 +37,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('items.custom.store') }}">
+    <form method="POST" action="{{ route('items.store') }}">
         @csrf
 
         <!-- Name -->

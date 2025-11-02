@@ -29,7 +29,6 @@ class StoreCustomItemRequest extends FormRequest
             ],
 
             // Other attributes
-            'type'             => ['required', 'in:Gear,Weapon,Armor'],
             'description'      => ['nullable', 'string'],
             'weapon_key'       => ['nullable', 'string', 'max:100'],
             'armor_key'        => ['nullable', 'string', 'max:100'],
