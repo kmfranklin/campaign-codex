@@ -3,7 +3,7 @@
 @section('content')
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
     {{-- Back link --}}
-    <a href="{{ $item->is_srd ? route('items.index') : route('items.custom.index') }}"
+    <a href="{{ $item->is_srd ? route('items.index') : route('customItems.index') }}"
        class="inline-flex items-center text-sm text-purple-800 hover:text-purple-900 mb-4 font-medium">
       <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
            viewBox="0 0 24 24" stroke="currentColor">
@@ -60,12 +60,12 @@
             {{-- OWNER ACTIONS --}}
             @can('update', $item)
                 <div class="ml-auto flex gap-2">
-                    <a href="{{ route('items.custom.edit', $item) }}"
+                    <a href="{{ route('items.edit', $item) }}"
                        class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
                         Edit
                     </a>
                     @can('delete', $item)
-                        <form action="{{ route('items.custom.destroy', $item) }}"
+                        <form action="{{ route('items.destroy', $item) }}"
                               method="POST"
                               onsubmit="return confirm('Delete this item?')">
                             @csrf

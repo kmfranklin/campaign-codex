@@ -1,29 +1,18 @@
 {{-- resources/views/items/custom/create.blade.php --}}
 @extends('layouts.app')
 
-@php
-    $origin = request('from');
-
-    $backRoute = match($origin) {
-        'custom' => route('customItems.index'),
-        'srd' => route('srdItems.index'),
-        default => route('items.index'),
-    };
-@endphp
-
 @section('content')
 <div class="max-w-5xl mx-auto bg-white shadow rounded-lg p-6">
     {{-- Back link --}}
-    <a href="{{ $backRoute }}"
+    <a href="{{ route('customItems.index') }}"
        class="inline-flex items-center text-sm text-purple-800 hover:text-purple-900 mb-4 font-medium">
-        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 19l-7-7 7-7"/>
-        </svg>
-        Back to Items
+      <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back to Items
     </a>
-
 
     <h1 class="text-2xl font-bold mb-6">Create Custom Item</h1>
 
@@ -227,7 +216,7 @@
                                   focus:border-purple-500 focus:ring-purple-500 sm:text-sm">
                 </div>
                 <div>
-                    <label for="strength_requirement" class="block text-sm font-medium text-gray-700">Strength Requirement</label>
+                    <label for="strength_requirement" class="block text-sm font-medium text-gray-700">Strength      Requirement</label>
                     <input id="strength_requirement" name="strength_requirement" type="number"
                            value="{{ old('strength_requirement', $prefill['strength_requirement'] ?? '') }}"
                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm
@@ -245,7 +234,7 @@
                 </label>
                 <label class="inline-flex items-center">
                     <input type="checkbox" name="imposes_stealth_disadvantage" value="1"
-                           @checked(old('imposes_stealth_disadvantage', $prefill['imposes_stealth_disadvantage'] ?? false))
+                           @checked(old('imposes_stealth_disadvantage', $prefill['imposes_stealth_disadvantage'] ??         false))
                            class="rounded border-gray-300 text-purple-600 focus:ring-purple-500">
                     <span class="ml-2">Stealth Disadvantage</span>
                 </label>
@@ -258,11 +247,9 @@
         @endif
 
         <div class="pt-4 border-t flex justify-between">
-    {{-- Cancel button --}}
-    <a href="{{ $backRoute }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
-        Cancel
-    </a>
-
+            <a href="{{ route('customItems.index') }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+                Cancel
+            </a>
             <button type="submit"
                     class="px-6 py-2 bg-purple-800 text-white font-semibold rounded hover:bg-purple-900
                            focus:outline-none focus:ring-2 focus:ring-purple-500">
