@@ -29,6 +29,8 @@ class ItemController extends Controller
             ->paginate(15)
             ->appends($request->except('page'));
 
+        session(['items.last_index' => 'all']);
+        session(['items.last)index_url' => request()->fullUrl()]);
         return $this->renderItems($request, $items, 'items.index');
     }
 
@@ -44,6 +46,8 @@ class ItemController extends Controller
             ->paginate(15)
             ->appends($request->except('page'));
 
+        session(['items.last_index' => 'srd']);
+        session(['items.last_index_url' => request()->fullUrl()]);
         return $this->renderItems($request, $items, 'items.srd');
     }
 
@@ -60,6 +64,8 @@ class ItemController extends Controller
             ->paginate(15)
             ->appends($request->except('page'));
 
+        session(['items.last_index' => 'custom']);
+        session(['items.last_index_url' => request()->fullUrl()]);
         return $this->renderItems($request, $items, 'items.custom');
     }
 
@@ -68,16 +74,53 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
+        // eager load relations we use
         $item->load([
+            'weapon',
             'weapon.damageType',
             'armor',
             'category',
             'rarity',
+            'baseItem.weapon',
             'baseItem.weapon.damageType',
-            'baseItem.armor'
+            'user',
         ]);
 
-        return view('items.show', compact('item'));
+        // pick the weapon source: prefer item->weapon, fallback to baseItem->weapon
+        $weaponSource = $item->weapon ?? optional($item->baseItem)->weapon ?? null;
+
+        $magicBonus = $item->magic_bonus ?? null;
+        if (is_null($magicBonus) && preg_match('/\+(\d+)/', $item->name, $m)) {
+            $magicBonus = intval($m[1]);
+        }
+
+        // build $displayWeapon only when a weapon source exists
+        $displayWeapon = null;
+        if ($weaponSource) {
+            $baseDamageDice = $weaponSource->damage_dice ?? null;
+            $damageTypeName = optional($weaponSource->damageType)->name ?? null;
+
+            // combined damage string like "1d10 +1 Piercing"
+            $damageString = null;
+            if ($baseDamageDice) {
+                $damageString = trim($baseDamageDice . ($magicBonus ? " +{$magicBonus}" : '') . ($damageTypeName ? "{$damageTypeName}" : ''));
+            }
+
+            $displayWeapon = [
+                'base_damage_dice' => $baseDamageDice,
+                'damage_type' => $damageTypeName,
+                'damageString' => $damageString,
+                'attackBonus' => $magicBonus ? "+{$magicBonus}" : null,
+                'range' => $weaponSource->range ?? null,
+                'long_range' => $weaponSource->long_range ?? null,
+                'distance_unit' => $weaponSource->distance_unit ?? 'ft',
+                'is_improvised' => (bool) ($weaponSource->is_improvised ?? false),
+                'is_simple' => (bool) ($weaponSource->is_simple ?? false),
+                'source' => $item->weapon ? 'item' : (optional($item->baseItem)->weapon ? 'base' : null),
+            ];
+        }
+
+        return view('items.show', compact('item', 'displayWeapon'));
     }
 
     /**
