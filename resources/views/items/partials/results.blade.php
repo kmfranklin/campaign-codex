@@ -39,11 +39,41 @@
                 @endif
               </td>
               <td class="px-6 py-4 text-sm whitespace-nowrap">
-                <a href="{{ route('items.show', $item) }}"
-                   class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
-                  View
-                </a>
-              </td>
+                  {{-- Always show View --}}
+                  <a href="{{ route('items.show', $item) }}"
+                     class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium mr-3">
+                    View
+                  </a>
+
+                  @auth
+                    @if($item->is_srd)
+                      {{-- SRD items: allow cloning --}}
+                      <a href="{{ route('items.custom.create', ['base_item_id' => $item->id, 'from' => request('from') ?? session('items.last_index')]) }}"
+                         class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium mr-3">
+                        Clone
+                      </a>
+                    @else
+                      {{-- Custom item: owner can edit/delete --}}
+                      @can('update', $item)
+                        <a href="{{ route('items.edit', $item) }}?from={{ request('from') ?? session('items.last_index') }}"
+                           class="text-yellow-600 hover:text-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-300 font-medium mr-3">
+                          Edit
+                        </a>
+                      @endcan
+
+                      @can('delete', $item)
+                        <form action="{{ route('items.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Delete this item?');">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit"
+                                  class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-300 font-medium">
+                            Delete
+                          </button>
+                        </form>
+                      @endcan
+                    @endif
+                  @endauth
+                </td>
             </tr>
           @empty
             <tr>
@@ -73,10 +103,39 @@
               </p>
             @endif
           </div>
-          <a href="{{ route('items.show', $item) }}"
-             class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
-            View
-          </a>
+          <div class="flex items-center gap-3">
+              <a href="{{ route('items.show', $item) }}"
+                 class="text-purple-600 hover:text-purple-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
+                View
+              </a>
+
+              @auth
+                @if($item->is_srd)
+                  <a href="{{ route('items.custom.create', ['base_item_id' => $item->id, 'from' => request('from') ?? session('items.last_index')]) }}"
+                     class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 font-medium">
+                    Clone
+                  </a>
+                @else
+                  @can('update', $item)
+                    <a href="{{ route('items.edit', $item) }}?from={{ request('from') ?? session('items.last_index') }}"
+                       class="text-yellow-600 hover:text-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-300 font-medium">
+                      Edit
+                    </a>
+                  @endcan
+
+                  @can('delete', $item)
+                    <form action="{{ route('items.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Delete this item?');">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit"
+                              class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-300 font-medium">
+                        Delete
+                      </button>
+                    </form>
+                  @endcan
+                @endif
+              @endauth
+            </div>
         </div>
       </div>
     @empty

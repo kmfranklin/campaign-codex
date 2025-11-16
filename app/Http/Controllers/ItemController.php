@@ -25,6 +25,7 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         $query = Item::with(['weapon.damageType', 'armor', 'category', 'rarity']);
+        $query = $query->orderByRaw('LOWER(`name`) ASC');
         $items = $this->applyFilters($request, $query)
             ->paginate(15)
             ->appends($request->except('page'));
@@ -41,6 +42,7 @@ class ItemController extends Controller
     {
         $query = Item::where('is_srd', true)
             ->with(['category', 'rarity', 'weapon.damageType', 'armor']);
+        $query = $query->orderByRaw('LOWER(`name`) ASC');
 
         $items = $this->applyFilters($request, $query)
             ->paginate(15)
@@ -59,6 +61,7 @@ class ItemController extends Controller
         $query = Item::where('is_srd', false)
             ->where('user_id', auth()->id())
             ->with(['category', 'rarity', 'weapon.damageType', 'armor']);
+        $query = $query->orderByRaw('LOWER(`name`) ASC');
 
         $items = $this->applyFilters($request, $query)
             ->paginate(15)
