@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Campaign Codex') }}</title>
+    <title>{{ config('app.name', 'Campaign Compendium') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50 text-gray-900">
@@ -15,7 +15,7 @@
     </main>
 
     <footer class="bg-white border-t py-4 text-center text-sm text-gray-500">
-        &copy; {{ date('Y') }} Campaign Codex. All rights reserved.
+        &copy; {{ date('Y') }} Campaign Compendium. All rights reserved.
     </footer>
 </body>
 </html>

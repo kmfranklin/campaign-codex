@@ -9,11 +9,11 @@ export default defineConfig({
         }),
     ],
     server: {
-        host: 'campaign-codex.local',
+        host: 'campaign-compendium.local',
         port: 5173,
         cors: true,
         hmr: {
-            host: 'campaign-codex.local',
+            host: 'campaign-compendium.local',
         },
     },
 });
