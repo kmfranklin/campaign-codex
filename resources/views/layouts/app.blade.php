@@ -1,21 +1,22 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!-- layouts/app.blade.php -->
+<html class="dark">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Campaign Compendium') }}</title>
+    <title>Campaign Compendium</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+<body class="bg-gray-50 text-gray-900 font-sans flex flex-col min-h-screen">
     @include('layouts.navigation')
 
-    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
-        <x-flash />
+    @hasSection('hero')
+        @yield('hero')
+    @endif
+
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         @yield('content')
     </main>
 
-    <footer class="bg-white border-t py-4 text-center text-sm text-gray-500">
-        &copy; {{ date('Y') }} Campaign Compendium. All rights reserved.
+    <footer class="bg-white border-t mt-12 py-6 text-center text-gray-500">
+        © {{ date('Y') }} Campaign Compendium. All rights reserved.
     </footer>
 </body>
 </html>

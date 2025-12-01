@@ -6,6 +6,8 @@ import Alpine from 'alpinejs';
 
 import './items';
 
+import './darkmode.js';
+
 window.Alpine = Alpine;
 
 Alpine.start();

@@ -1,6 +1,6 @@
 {{-- Desktop Table --}}
 <div class="hidden sm:block">
-    <div class="overflow-x-auto bg-white border border-gray-200 shadow-sm sm:rounded-lg">
+    <div class="w-full max-w-7xl mx-auto overflow-x-auto bg-white border border-gray-200 shadow-sm sm:rounded-lg">
         <table class="min-w-full table-auto">
             <thead class="bg-gray-100">
                 <tr>
@@ -12,10 +12,10 @@
             <tbody>
                 @forelse($campaigns as $campaign)
                     <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-normal break-words max-w-xs">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-normal break-words">
                             {{ $campaign->name }}
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-normal break-words max-w-md">
+                        <td class="px-6 py-4 text-sm text-gray-700 whitespace-normal break-words">
                             {{ $campaign->description ? Str::limit($campaign->description, 120) : '—' }}
                         </td>
                         <td class="px-6 py-4 text-sm whitespace-nowrap">
