@@ -4,12 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Illuminate\Database\Eloquent\Factories\BelongsToRelationship;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -57,19 +57,29 @@ class User extends Authenticatable
 
     public function campaigns(): BelongsToMany
     {
-        return $this->belongsToMany(Campaign::class)
-                    ->withPivot('role')
+        return $this->belongsToMany(Campaign::class, 'campaign_user')
+                    ->withPivot('role_id')
                     ->withTimestamps();
     }
 
     public function campaignsAsDm(): BelongsToMany
     {
-        return $this->campaigns()->wherePivot('role', 'dm');
+        return $this->campaigns()->wherePivot('role_id', Role::DM);
     }
 
     public function campaignsAsPlayer(): BelongsToMany
     {
-        return $this->campaigns()->wherePivot('role', 'player');
+        return $this->campaigns()->wherePivot('role_id', Role::PLAYER);
+    }
+
+    public function campaignsAsCoDm(): BelongsToMany
+    {
+        return $this->campaigns()->wherePivot('role_id', Role::CO_DM);
+    }
+
+    public function campaignsAsSpectator(): BelongsToMany
+    {
+        return $this->campaigns()->wherePivot('role_id', Role::SPECTATOR);
     }
 
     public function ownedCampaigns(): HasMany
