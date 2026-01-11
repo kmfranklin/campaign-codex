@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     const DM        = 1;
-    const CO_DM     = 2;
-    const PLAYER    = 3;
-    const SPECTATOR = 4;
+    const PLAYER    = 2;
 
     protected $fillable = ['name', 'description'];
 

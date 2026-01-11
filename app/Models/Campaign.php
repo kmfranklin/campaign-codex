@@ -34,16 +34,6 @@ class Campaign extends Model
         return $this->members()->wherePivot('role_id', Role::DM);
     }
 
-    public function coDms()
-    {
-        return $this->members()->wherePivot('role_id', Role::CO_DM);
-    }
-
-    public function spectators()
-    {
-        return $this->members()->wherePivot('role_id', Role::SPECTATOR);
-    }
-
     // Quests in this campaign
     public function quests()
     {

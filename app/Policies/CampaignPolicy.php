@@ -26,18 +26,16 @@ class CampaignPolicy
     public function manage(User $user, Campaign $campaign): bool
     {
         return $campaign->members()
-            ->wherePivotIn('role_id', [Role::DM, Role::CO_DM])
+            ->wherePivot('role_id', Role::DM)
             ->where('user_id', $user->id)
             ->exists();
     }
 
-    // Update uses manage()
     public function update(User $user, Campaign $campaign): bool
     {
         return $this->manage($user, $campaign);
     }
 
-    // Delete = DM only
     public function delete(User $user, Campaign $campaign): bool
     {
         return $campaign->members()
@@ -56,7 +54,6 @@ class CampaignPolicy
         return $this->delete($user, $campaign);
     }
 
-    // Membership management = DM or Co‑DM
     public function addMember(User $user, Campaign $campaign): bool
     {
         return $this->manage($user, $campaign);

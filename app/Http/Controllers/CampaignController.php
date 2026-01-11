@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campaign;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCampaignRequest;
 use App\Http\Requests\UpdateCampaignRequest;
@@ -55,7 +56,7 @@ class CampaignController extends Controller
             'dm_id'       => $user->id,
         ]);
 
-        $campaign->members()->attach($user->id, ['role' => 'dm']);
+        $campaign->members()->attach($user->id, ['role_id' => Role::DM]);
 
         return redirect()
             ->route('campaigns.show', $campaign)
@@ -121,19 +122,59 @@ class CampaignController extends Controller
 
     /**
      * Add a member to the campaign.
-     * - DM-only; will later use a dedicated route and FormRequest.
      */
     public function addMember(Request $request, Campaign $campaign)
     {
         $this->authorize('addMember', $campaign);
 
-        // TODO: Validate target user + role, attach via pivot
+        $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+        ]);
+
+        $targetUser = \App\Models\User::where('email', $request->email)->first();
+
+        if ($campaign->members()->where('user_id', $targetUser->id)->exists()) {
+            return back()->withErrors([
+                'email' => 'That user is already a member of this campaign.',
+            ]);
+        }
+
+        $campaign->members()->attach($targetUser->id, [
+            'role_id' => \App\Models\Role::PLAYER,
+        ]);
+
+        return back()->with('success', 'Member added successfully.');
     }
 
-    public function removeMember(Request $request, Campaign $campaign)
-    {
-        $this->authorize('removeMember', $campaign);
+public function removeMember(Request $request, Campaign $campaign)
+{
+    $this->authorize('removeMember', $campaign);
 
-        // TODO: Validate target user, detach from pivot
+    $request->validate([
+        'user_id' => ['required', 'exists:users,id'],
+    ]);
+
+    $targetUser = \App\Models\User::find($request->user_id);
+
+    if (! $campaign->members()->where('user_id', $targetUser->id)->exists()) {
+        return back()->withErrors([
+            'user_id' => 'That user is not a member of this campaign.',
+        ]);
     }
+
+    // Prevent removing the DM
+    if ($campaign->members()
+        ->where('user_id', $targetUser->id)
+        ->wherePivot('role_id', \App\Models\Role::DM)
+        ->exists()
+    ) {
+        return back()->withErrors([
+            'user_id' => 'The DM cannot be removed from the campaign.',
+        ]);
+    }
+
+    $campaign->members()->detach($targetUser->id);
+
+    return back()->with('success', 'Member removed successfully.');
+}
 }
